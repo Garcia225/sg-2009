@@ -213,6 +213,7 @@ function obtenerResultadoProveedor(row){
     var codigo = row.split("|")[0];
     //asignar codigo a variable global
     _idProveedor = codigo;
+    alert("EL ID DEL PROVEEDORE ESSSSSSSSSSS ->"+_idProveedor);
     rellenarCamposProveedor(_idProveedor);
     _movIdCtaCte = getIdMovCtaCte(_idProveedor);
     alert("el movimiento es "+_movIdCtaCte);
@@ -423,12 +424,15 @@ function guardarFactura() {
         
     var id_factura = '1';
     var proveedor = _idProveedor;//$("select[id*=chProveedor]").val();
+    alert("PROVEEDORRRRR "+_idProveedor);
+    return false;
     var fecha = $("input[id*=tbFecha]").val();
     var total_factura = $("input[id*=tbTotal]").val();
     var empleado = "1";
     var num_factura = $("input[id*=tbNum]").val();
     var num_cheque = $("input[id*=tbNroCheque]").val();
-   
+    var cant_cuotas;
+    var sumaResta;
     //alert(_estado);
     //return false;
     
@@ -443,10 +447,19 @@ function guardarFactura() {
     if ($("input[id*=cbCredito]").is(":checked")) {
         alert("Credito");
         opcion = "Credito";
+        cant_cuotas = $("input[id*=tbCantCuotas]").val();
+        sumaResta = "R";
+        if(cant_cuotas == ""){
+            alert("Ingrese la cantidad de Cuotas");
+            return false;
+        }
+        //tbCantCuotas
     //return false;
     }else{
         alert("Contado");
-        opcion = "Contado";    
+        opcion = "Contado"; 
+        sumaResta = "S"; 
+        cant_cuotas = "0";
     }
     alert("num_cheque "+num_cheque+" _idBanco "+_idBanco+" opcion "+opcion);
     //return false;
@@ -463,7 +476,8 @@ function guardarFactura() {
     opcion, */
     
     var numCuota = 0;
-    var cantCuotas = $("input[id*=tbCantCuotas]").val();//
+    //var cantCuotas = $("input[id*=tbCantCuotas]").val();//
+    var cantCuotas = cant_cuotas;
     var importe = $("input[id*=tbTotal]").val();//
     var saldo = importe;
     var fechaVencimiento = "01/01/2009"; 
@@ -489,6 +503,7 @@ function guardarFactura() {
              "'saldo':'"+ saldo +"', " + 
              "'fechaVencimiento':'"+ fechaVencimiento +"', " +
              "'idFormaPago':'"+ idFormaPago +"', " + 
+             "'sumaResta':'"+ sumaResta +"', " + 
              "'idMovCtaCtePro':'"+idMovCtaCtePro+"'}"; 
              
     /*string detalle_factura, string num_cheque,

@@ -35,7 +35,9 @@ public class Proveedores
         telefono = _telefono;
         idTipoDoc = _id_tipo_doc;
 	}
-
+    public Proveedores()
+    {
+    }
 
     #region propiedades personas
     /// <summary>
@@ -432,6 +434,64 @@ public class Proveedores
 
             //serializar dataset
             sb.Append(serial.JSON(dataSet.Tables["PCCC_PROVEEDORES"]));
+        }
+        catch (Exception error)
+        {
+            sb.Append(error);
+        }
+        finally
+        {
+            conexion.CloseConnection();
+        }
+
+
+        return sb.ToString();
+
+    }
+
+    /// <summary>
+    /// Obtengo el id de la cta cte del proveedor
+    /// </summary>
+    /// <param name="idProveedor"></param>
+    /// <returns></returns>
+    public string getIdCtaCte(int idProveedor)
+    {
+
+        Serializador serial = new Serializador();
+        StringBuilder sb = new StringBuilder();
+        Conexion conexion = null;
+
+        try
+        {
+
+            conexion = new Conexion();
+
+            //adaptador de datos
+            SqlDataAdapter comando = new SqlDataAdapter();
+
+            //crea el data set
+            DataSet dataSet = new DataSet();
+
+            //abre la conexion
+            conexion.OpenConnection();
+
+            conexion.getSqlConnection().BeginTransaction();
+
+            //crear sentencia sql
+            StringBuilder sentencia = new StringBuilder();
+
+            sentencia.Append(" SELECT num_cta_cte_pro from PCCC_CTA_CTE_PROVEEDOR");
+            sentencia.Append(" where id_proveedor = "+ Convert.ToInt32(idProveedor));
+
+            //carga el data set
+
+            comando = new SqlDataAdapter(sentencia.ToString(), conexion.getConectionString());
+            //llena el dataset
+            comando.Fill(dataSet, "PCCC_CTA_CTE_PROVEEDOR");
+
+
+            //serializar dataset
+            sb.Append(serial.JSON(dataSet.Tables["PCCC_CTA_CTE_PROVEEDOR"]));
         }
         catch (Exception error)
         {

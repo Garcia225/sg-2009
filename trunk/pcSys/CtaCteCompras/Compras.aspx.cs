@@ -332,10 +332,12 @@ public partial class Compras : System.Web.UI.Page
     public static string GuardarFactura(string id_factura, string proveedor, string num_factura, string fecha, 
         string total_factura, string condicion_pago, string empleado, string detalle_factura, string num_cheque,
         string id_banco, string opcion,string numCuota,string cantCuotas,string importe,string saldo,
-        string fechaVencimiento,string idFormaPago,string idMovCtaCtePro)
+        string fechaVencimiento,string idFormaPago,string sumaResta,string idMovCtaCtePro)
     {
+        
         // Pide los datos a la clase Cliente y lo devuelve
-        Factura factura = new Factura(id_factura, proveedor,num_factura, fecha, total_factura, condicion_pago, empleado, detalle_factura);
+        Factura factura = new Factura(id_factura, proveedor, num_factura, fecha, total_factura, condicion_pago, empleado, detalle_factura, cantCuotas, sumaResta);
+        //aqui se debe guardar el mov
         if (opcion == "Credito")
         {
             Cuotas cuota = new Cuotas("1", numCuota, cantCuotas, importe, saldo, fechaVencimiento, idFormaPago, idMovCtaCtePro);
