@@ -21,7 +21,9 @@ public class Factura
                     string total_factura,
                     string id_condicion_de_pago,
                     string id_empleado,
-                    string detalle_factura)
+                    string detalle_factura,
+                    string _cantCuotas,
+                    string sumaResta)
 	{
         idFactura= Convert.ToInt32(id_factura);
         idProveedor = Convert.ToInt32(id_proveedor);
@@ -31,12 +33,15 @@ public class Factura
         condicion = Convert.ToInt32(id_condicion_de_pago);
         detalle = detalle_factura;
         numFactura = Convert.ToInt32(num_factura);
+        cantCuotas = Convert.ToInt32(_cantCuotas);
+        sumaResta = suma_resta;
         /*numRenglon = Convert.ToInt32(num_renglon);
         cantidad = Convert.ToInt32(_cantidad);
         idMateriaPrima = Convert.ToInt32(id_materia_prima);*/
 	}
 
     public Factura() { }
+
     #region propiedades factura
     /// <summary>
     /// ID del proveedor
@@ -118,7 +123,9 @@ public class Factura
     }
 
     //DETALLE
-
+    /// <summary>
+    /// Detalle de la factura
+    /// </summary>
     private string detalle;
     public string Detalle {
 
@@ -127,7 +134,30 @@ public class Factura
     
     }
 
+    /// <summary>
+    /// Cantidad de cuotas con que se pagara la 
+    /// factura en caso de que sea credito
+    /// </summary>
+    private int cantCuotas;
+    public int CantCuotas
+    {
 
+        set { cantCuotas = value; }
+        get { return cantCuotas; }
+
+    }
+
+    /// <summary>
+    /// Suma y resta
+    /// </summary>
+    private string suma_resta;
+    public string SumaResta
+    {
+
+        set { suma_resta = value; }
+        get { return suma_resta; }
+
+    }
 
     #endregion
 
@@ -143,7 +173,7 @@ public class Factura
         int cont = 0;
         try
         {
-
+            //falta codigo para guardar mov de la cta cte de la factura
             // Crear y abrir la conexión
             _conexion = new Conexion();
             _conexion.OpenConnection();
@@ -224,7 +254,12 @@ public class Factura
                 procDetalle.ExecuteNonQuery();
 
             }
-
+            Proveedores prov = new Proveedores();
+            string idCtaCtePro;
+            idCtaCtePro = prov.getIdCtaCte(IdProvedor);
+            //Creo el movimieno en cta cte
+            MovCtaCte mov = new MovCtaCte("0", idCtaCtePro, "0", SumaResta, fecha.ToString(), getIdFac.ToString(), CantCuotas.ToString());
+            //mov.IdMovCtaCtePro();
             return "OK";
 
         }
