@@ -1,0 +1,161 @@
+﻿var hayFactura = 0;
+var oTable;
+var oTableCuota; 
+var oTableFactura;
+
+$(document).ready(function() {
+    listarFacturas(1);
+)};
+
+
+function listarFacturas(idCliente){
+//$("#imgLoad").show();
+/*var urlGetDataSet = "CtaCteCliente.aspx/GetFacturas";
+    $.ajax({
+        type: "POST",
+        dataType: "json",
+        contentType: "application/json; charset=utf-8",
+        url: urlGetDataSet,  //invocar al metodo del servidor que devuelve un datatable
+        data: "{'idCliente':'" + idCliente + "'}",
+        success: function armarTabla(datatable_servidor) {*/
+            datatable_servidor = "[[\"7\",\"7\",\"800000\",\"0\"],[\"8\",\"8\",\"400000\",\"0\"]]";
+            //obtengo el id de la tabla donde se generará la tabla dinamica
+            oTableFactura= $("table[id*=tableFacturas]").dataTable({
+                "aaData": eval(datatable_servidor),     //armar tabla con el arreglo serializado del servidor
+                "aoColumns": [
+                    { "sTitle": "", "bSortable": false,
+                        "fnRender": function(obj) {
+                            var idFactura = obj.aData[obj.iDataColumn];
+                            var sReturn = '<img id="' + idFactura + '" src="../images/details_open.png" alt="" onClick="getDetalle(this.id);" style="cursor:pointer"/>';
+                            return sReturn;
+                        }
+                    },
+                    {"sTitle": "Nro Factura" },   //crear titulos de las columnas    
+                    {"sTitle": "Total Factura" },
+				    {"sTitle": "Monto Pagado" }
+				],
+                "oLanguage": {                    //setear variables por defecto al idioma español
+                    "sProcessing": "Procesando...",
+                    "sLengthMenu": "Mostrar _MENU_ registros.",
+                    "sZeroRecords": "No se encontraron resultados",
+                    "sInfo": "(_START_-_END_) de _TOTAL_ registros",
+                    "sInfoEmpty": "(0-0) de 0 registros",
+                    "sInfoFiltered": "(_MAX_ registros en total)",
+                    "sSearch": "Buscar:"
+                }
+
+            });
+            //esconder imagenes 
+            //$("#imgLoad").hide();
+        /*},
+        //lanzar mensaje de error en caso que la llamada ajax tenga problemas
+        error: function(msg) {
+            alert("Se ha producido un error en la llamada ajax al metodo");
+        }*/
+    //});  //fin de llamada ajax
+    return false;
+}
+
+
+//funcion que manipula el evento click del boton seleccionado
+function getDetalle(idFactura) {
+    /*alert("detalle");
+    alert("idFactura "+idFactura);
+    alert($("img[id*=" + idFactura + "]").attr('src'));*/
+    //obtengo la fila del boton seleccionado
+    var nTr = $("img[id*=" + idFactura + "]").parents('tr:first');
+    _nTr = nTr;
+    if ($("img[id*=" + idFactura + "]").attr('src') == '../images/details_open.png') {
+ 
+        $("img[id*=" + idFactura + "]").attr('src', '../images/details_close.png');
+        //funcion que crea la tabla del detalle
+        //alert("nTr -> "+nTr);
+        listarCuotas(idFactura, nTr);
+        
+    } else {
+       $("img[id*=" + idFactura + "]").attr('src', '../images/details_open.png');
+        var nRemove = $(nTr).next()[0];
+        //remover el detalle
+        nRemove.parentNode.removeChild(nRemove);
+    }
+    return false;
+}
+
+
+
+/* Formating function for row details */
+function listarCuotas(idFactura, nTr) {
+    var urlGetDataSet = "CtaCteCliente.aspx/ObtenerCuotasCliente";
+    //llamada ajax al servidor para generar el datatable cabecera
+    /*$.ajax({
+        type: "POST",
+        dataType: "json",
+        contentType: "application/json; charset=utf-8",
+        url: urlGetDataSet,  //invocar al metodo del servidor que devulve un datatable
+        data:"{'idFactura':'"+ idFactura + "', " + 
+                 "'idCliente':'"+ _idCliente + "'}",
+        success: function armarTabla(datatable_servidor) {*/
+            /* se encarga de mostrar el detalle debajo de la linea seleccionada
+            y de traer el detalle de la factura*/
+            //parametros(NodoSeleccionado, funcion, clase css)
+             datatable_servidor  =  "[[\"19\",\"1/4\",\"01/08/2009 0:00:00\",\"200000\",\"0\",\"0\",\"01/11/2009 19:27:02\",\"PENDIENTE\",\"19\",\"19\"],[\"20\",\"2/4\",\"01/09/2009 0:00:00\",\"200000\",\"0\",\"0\",\"\",\"PENDIENTE\",\"20\",\"20\"],[\"21\",\"3/4\",\"01/10/2009 0:00:00\",\"200000\",\"0\",\"0\",\"\",\"PENDIENTE\",\"21\",\"21\"],[\"22\",\"4/4\",\"01/11/2009 0:00:00\",\"200000\",\"0\",\"0\",\"\",\"PENDIENTE\",\"22\",\"22\"]]";
+             oTableFactura.fnOpen(nTr, armarTablaDetalle(datatable_servidor, idFactura), 'details');
+             oTableCuota = $("table[id*=popup" + idFactura + "]").dataTable({
+                    "aaData": eval(datatable_servidor),     //armar tabla con el arreglo serializado del serividor
+                    "aoColumns": [
+                    { "sTitle": "Cod. Cuota" },          //crear titulos de las columnas
+                    { "sTitle": "Nro. Cuota" },
+                    { "sTitle": "Fecha Vencimiento" },
+                    { "sTitle": "Importe" },
+                    { "sTitle": "Interes" },
+                    { "sTitle": "Monto parcial pagado" },
+                    { "sTitle": "Fecha ultimo pago" },
+                    { "sTitle": "Estado de cuota" },
+                    { "sTitle": "Pago Parcial", "bSortable": false,
+                    "fnRender": function(obj){
+                        var monto = obj.aData[obj.iDataColumn];
+                        var retornado = '<input id ="'+monto+'" type = "text"/>';
+                        $("input[id*="+monto+"]").numeric();
+                         //retornado.numeric();
+                         //$("input[id*=txtTelefono]").numeric();
+                        return retornado;
+                    }
+                    },
+                     { "sTitle": "Seleccionar", "bSortable": false,
+                    "fnRender": function(obj) {
+                        var idFacturaDet = obj.aData[obj.iDataColumn];
+                        var sReturn = '<input id="' + idFacturaDet + '" type="checkbox"/>';
+                        return sReturn;
+                        }
+                    }                   
+                    ],
+                    "oLanguage": {                    //setear variables por defecto al idioma español
+                    "sProcessing": "Procesando...",
+                    "sLengthMenu": "Mostrar _MENU_ registros",
+                    "sZeroRecords": "No se encontraron resultados",
+                    "sInfo": "(_START_-_END_) de _TOTAL_ registros",
+                    "sInfoEmpty": "(0-0) de 0 registros",
+                    "sInfoFiltered": "(_MAX_ registros en total)",
+                    "sSearch": "Buscar:"
+                    }
+
+              });    
+        /*},
+        //lanzar mensaje de error en caso que la llamada ajax tenga problemas
+        error: function(msg) {
+            alert("Se ha producido un error en la llamada ajax al metodo:" + urlGetDataSet);
+        }
+    }); //fin de llamada ajax*/
+
+    return false;
+}
+
+
+function armarTablaDetalle(datatable_servidor, idFactura) {
+    //alert("La nueva tabla");
+    var sOut = '<p style="padding-left:50px; font-size:12pt"><u>Cuotas pendientes</u></p>';
+    sOut += '<div style="padding-left:50px;padding-bottom:15px"><table cellpadding="5" cellspacing="0" border="1" id="popup' + idFactura + '">';
+    //cerrar tags
+    sOut += '</table><br/><br/><button style="float:right" id="btnPagar" OnClick="cargarArreglo('+ idFactura +'); return false;">Pagar</button><br/></div>';
+    return sOut;
+}
