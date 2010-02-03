@@ -337,6 +337,7 @@ public partial class Compras : System.Web.UI.Page
         
         // Pide los datos a la clase Cliente y lo devuelve
         Factura factura = new Factura(id_factura, proveedor, num_factura, fecha, total_factura, condicion_pago, empleado, detalle_factura, cantCuotas, sumaResta);
+        factura.Guardar();
         //aqui se debe guardar el mov
         if (opcion == "Credito")
         {

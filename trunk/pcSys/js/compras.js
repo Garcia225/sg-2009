@@ -425,7 +425,7 @@ function guardarFactura() {
     var id_factura = '1';
     var proveedor = _idProveedor;//$("select[id*=chProveedor]").val();
     alert("PROVEEDORRRRR "+_idProveedor);
-    return false;
+    //return false;
     var fecha = $("input[id*=tbFecha]").val();
     var total_factura = $("input[id*=tbTotal]").val();
     var empleado = "1";
@@ -474,7 +474,7 @@ function guardarFactura() {
     num_cheque,
     id_banco,  
     opcion, */
-    
+    alert("Suma o Resta "+sumaResta);
     var numCuota = 0;
     //var cantCuotas = $("input[id*=tbCantCuotas]").val();//
     var cantCuotas = cant_cuotas;
