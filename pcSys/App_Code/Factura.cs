@@ -34,7 +34,7 @@ public class Factura
         detalle = detalle_factura;
         numFactura = Convert.ToInt32(num_factura);
         cantCuotas = Convert.ToInt32(_cantCuotas);
-        sumaResta = suma_resta;
+        suma_resta = sumaResta;
         /*numRenglon = Convert.ToInt32(num_renglon);
         cantidad = Convert.ToInt32(_cantidad);
         idMateriaPrima = Convert.ToInt32(id_materia_prima);*/
@@ -254,12 +254,35 @@ public class Factura
                 procDetalle.ExecuteNonQuery();
 
             }
+
+            /////////////////////////////////////////
+            //cta cte
+            //Obtenemos el id de a cuenta del cliente
+            string consultaIdCtaCte = "SELECT num_cta_cte_pro from PCCC_CTA_CTE_PROVEEDOR where id_proveedor = "+IdProvedor;
+
+            SqlCommand consultaCtaCte = new SqlCommand(consultaIdCtaCte, _conexion.getSqlConnection());
+            SqlDataReader readerCtaCte = consultaCtaCte.ExecuteReader();
+            string idCtaCte = "";
+            int getIdCtaCte = 0;
+            while (readerCtaCte.Read())
+            {
+                idCtaCte = readerCtaCte[0].ToString();
+            }
+            reader.Close();
+            getIdCtaCte = Convert.ToInt32(idCtaCte);
+            /*SELECT num_cta_cte_pro from PCCC_CTA_CTE_PROVEEDOR where id_proveedor =*/
+
+            /////////////////////////////////////////
             Proveedores prov = new Proveedores();
             string idCtaCtePro;
-            idCtaCtePro = prov.getIdCtaCte(IdProvedor);
+            //idCtaCtePro = prov.getIdCtaCte(IdProvedor);
             //Creo el movimieno en cta cte
-            MovCtaCte mov = new MovCtaCte("0", idCtaCtePro, "0", SumaResta, fecha.ToString(), getIdFac.ToString(), CantCuotas.ToString());
-            //mov.IdMovCtaCtePro();
+            string fecha_ = fecha.ToString();
+            string idFac_ = getIdFac.ToString();
+            string cantCuotas_ = CantCuotas.ToString();
+            MovCtaCte mov = new MovCtaCte("0", getIdCtaCte.ToString(), "0", SumaResta, 
+                fecha_, idFac_, cantCuotas_);
+            mov.Guardar();
             return "OK";
 
         }
