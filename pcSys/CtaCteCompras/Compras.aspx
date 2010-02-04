@@ -9,10 +9,10 @@
     <script type="text/javascript" src="../js/jquery.autocomplete.js"></script>
 
     <script type="text/javascript" language="javascript" src="../js/jquery.validate.js"></script>
-
+<script type="text/javascript" language="javascript" src="../js/JSON.js"></script>
     <script type="text/javascript" language="javascript" src="../js/compras.js"></script>
 
-    <script type="text/javascript" language="javascript" src="../js/JSON.js"></script>
+    
 
     <script type="text/javascript" src="../js/jquery.maskedinput-1.2.2.min.js"></script>
 
@@ -229,7 +229,7 @@ function cancela(){
                                         <asp:Label ID="lbNum" Text="Numero" runat="server" Font-Bold="True" ForeColor="Gray"></asp:Label></td>
                                     <td align="left">
                                         <asp:TextBox ID="tbNum" runat="server" MaxLength="9" Width="70px"></asp:TextBox><font
-                                                color="red">*</font></td>
+                                            color="red">*</font></td>
                                     <td align="right">
                                         <asp:Label ID="lbFecha" Text="Fecha" runat="server" Font-Bold="True" ForeColor="Gray"></asp:Label></td>
                                     <td align="left">
@@ -264,8 +264,7 @@ function cancela(){
                                         <asp:Label ID="lbProveedor" Text="Proveedor" runat="server" Font-Bold="True" ForeColor="Gray"></asp:Label>
                                     </td>
                                     <td align="left" colspan="4">
-                                        <asp:TextBox ID="tbProveedor" runat="server" Width="500px"></asp:TextBox><font
-                                                color="red">*</font>
+                                        <asp:TextBox ID="tbProveedor" runat="server" Width="500px"></asp:TextBox><font color="red">*</font>
                                     </td>
                                     <td align="right" colspan="2">
                                         <asp:Label ID="lbDoc" Text="Documento" runat="server" Font-Bold="True"></asp:Label>
@@ -414,26 +413,23 @@ function cancela(){
                                                         <asp:TextBox ID="tbValor" runat="server" Width="350px"></asp:TextBox>
                                                         <!-- TARJETA -->
                                                         <div id="divCheque">
-                                                        <table>
-                                                        <tr>
-                                                        <td>
-                                                        <asp:Label ID="lbNroCheque" runat="server" Text="Nro Cheque"></asp:Label>
-                                                        </td>
-                                                        <td>
-                                                        <asp:TextBox ID="tbNroCheque" runat="server"></asp:TextBox>
-                                                        </td>
-                                                        <td>
-                                                        <asp:Label ID="lbBanco" Text="Banco" runat="server"></asp:Label>
-                                                        </td>
-                                                        <td>
-                                                        <asp:TextBox ID="tbBanco" runat="server"></asp:TextBox>
-                                                        </td>
-                                                        </tr>
-                                                        
-                                                        </table>
+                                                            <table>
+                                                                <tr>
+                                                                    <td>
+                                                                        <asp:Label ID="lbNroCheque" runat="server" Text="Nro Cheque"></asp:Label>
+                                                                    </td>
+                                                                    <td>
+                                                                        <asp:TextBox ID="tbNroCheque" runat="server"></asp:TextBox>
+                                                                    </td>
+                                                                    <td>
+                                                                        <asp:Label ID="lbBanco" Text="Banco" runat="server"></asp:Label>
+                                                                    </td>
+                                                                    <td>
+                                                                        <asp:TextBox ID="tbBanco" runat="server"></asp:TextBox>
+                                                                    </td>
+                                                                </tr>
+                                                            </table>
                                                         </div>
-                                                        
-                                                        
                                                     </td>
                                                 </tr>
                                             </table>
@@ -480,7 +476,8 @@ function cancela(){
                                         ImageUrl="../images/new.ico" />
                                 </td>
                                 <td>
-                                    <asp:ImageButton ID="imgbtGuardar" runat="server" OnClientClick="guardarFactura(); return false" ImageUrl="../images/save.png" />
+                                    <asp:ImageButton ID="imgbtGuardar" runat="server" OnClientClick="guardarFactura(); return false"
+                                        ImageUrl="../images/save.png" />
                                 </td>
                                 <td>
                                     <asp:ImageButton ID="imgbtdMod" runat="server" ImageUrl="../images/list.ico" />
@@ -500,6 +497,19 @@ function cancela(){
             </tr>
             <tr>
                 <td colspan="5">
+                </td>
+            </tr>
+            <tr>
+                <td colspan="2">
+                    <!-- Tabla Dinamica -->
+                    <div id="divContenedor">
+                        <!-- tabla donde se genera la tabla dinamica-->
+                        <table cellpadding="0" cellspacing="0" border="1" class="display" id="tablaFactura">
+                            <tbody>
+                                <!-- Aqui se carga la tabla dinamica-->
+                            </tbody>
+                        </table>
+                    </div>
                 </td>
             </tr>
         </table>
