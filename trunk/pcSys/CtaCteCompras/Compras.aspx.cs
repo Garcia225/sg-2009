@@ -334,25 +334,40 @@ public partial class Compras : System.Web.UI.Page
         string id_banco, string opcion,string numCuota,string cantCuotas,string importe,string saldo,
         string fechaVencimiento,string idFormaPago,string sumaResta,string idMovCtaCtePro)
     {
-        
-        // Pide los datos a la clase Cliente y lo devuelve
-        Factura factura = new Factura(id_factura, proveedor, num_factura, fecha, total_factura, condicion_pago, empleado, detalle_factura, cantCuotas, sumaResta);
-        factura.Guardar();
-        //aqui se debe guardar el mov
+        Factura fac = new Factura();
+       
+        MovCtaCte mov = new MovCtaCte();
+        int i = 0;
         if (opcion == "Credito")
         {
-            Cuotas cuota = new Cuotas("1", numCuota, cantCuotas, importe, saldo, fechaVencimiento, idFormaPago, idMovCtaCtePro);
+            string estado = fac.getEstado("PAGADO");
+            // Pide los datos a la clase Cliente y lo devuelve
+            Factura factura = new Factura(id_factura, proveedor, num_factura, fecha, total_factura, condicion_pago, empleado, detalle_factura, cantCuotas, sumaResta, estado);
+            factura.Guardar();
+            //fac.getEstado(opcion.ToUpper());
+            //factura.Guardar();
+            string ultimo = factura.ultimoGuardado();//75
+            string idMov = mov.GetIdMovCtaCte(ultimo);//11
+            //obtener de alguna forma el mov cta cte pro
+            for (i = 0; i < (Convert.ToInt32(cantCuotas)); i++ ) { 
+            Cuotas cuota = new Cuotas("1", (i+1).ToString(), cantCuotas, importe, saldo, fechaVencimiento, idFormaPago, idMov);
             cuota.Guardar();
-            return factura.Guardar();
+            }
+        return "EXITO";
+             
         }
         else
         {
+            string estado = fac.getEstado("PENDIENTE");
+            // Pide los datos a la clase Cliente y lo devuelve
+            Factura factura = new Factura(id_factura, proveedor, num_factura, fecha, total_factura, condicion_pago, empleado, detalle_factura, cantCuotas, sumaResta, estado);
+            factura.Guardar();
 
             Cheques cheque = new Cheques(total_factura, num_cheque, fecha, id_banco);
-            factura.Guardar();
+            //factura.Guardar();
             return cheque.Guardar();
         }
-        return factura.Guardar();
+        return "ERROR";
     }
 
     /// <summary>
