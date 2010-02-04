@@ -1,0 +1,83 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xml:lang="en" xmlns="http://www.w3.org/1999/xhtml" lang="en"><head>
+<meta http-equiv="content-type" content="text/html; charset=ISO-8859-1">
+
+
+	<title>Tabbed Structure - Regular</title>
+	<link rel="stylesheet" href="jQuery_files/style.css" type="text/css" media="screen">
+    
+    <script src="jQuery_files/jquery-1.js"></script>
+    <script>
+	
+	  // When the document loads do everything inside here ...
+	  $(document).ready(function(){
+		
+		// When a link is clicked
+		$("a.tab").click(function () {
+			
+			
+			// switch all tabs off
+			$(".active").removeClass("active");
+			
+			// switch this tab on
+			$(this).addClass("active");
+			
+			// slide all content up
+			$(".content").slideUp();
+			
+			// slide this content up
+			var content_show = $(this).attr("title");
+			$("#"+content_show).slideDown();
+		  
+		});
+	
+	  });
+  </script>
+</head><body>
+<div id="tabbed_box_1" class="tabbed_box">
+	<h4>SysGestion <small>Selec un tab</small></h4>
+    <div class="tabbed_area">
+    
+    	
+        <ul class="tabs">
+            <li><a href="#" title="content_1" class="tab">Caja/banco</a></li>
+            <li><a href="#" title="content_2" class="tab">cont</a></li>
+            <li><a href="#" title="content_3" class="tab active">reports</a></li>
+        </ul>
+        
+        <div style="display: none;" id="content_1" class="content">
+        	<ul>
+            	<li><a href="">Cualquier cosa blabla <small>1</small></a></li>
+            	<li><a href="">Cualquier cosa blabla<small>2</small></a></li>
+            	<li><a href="">Cualquier cosa blabla<small>3</small></a></li>
+            	<li><a href="">Cualquier cosa blabla<small>4</small></a></li>
+            	<li><a href="">Cualquier cosa blabla<small>5</small></a></li>
+            	<li><a href="">Cualquier cosa blabla<small>6</small></a></li>
+			</ul>
+        </div>
+        <div style="display: none;" id="content_2" class="content">
+        	<ul>
+        	    <li><a href="">Hola <small>I'm Gaby</small></a></li>
+            	<li><a href="">December 2008 <small>6 Posts</small></a></li>
+            	<li><a href="">November 2008 <small>4 Posts</small></a></li>
+            	<li><a href="">October 2008 <small>22 Posts</small></a></li>
+            	<li><a href="">September 2008 <small>12 Posts</small></a></li>
+            	<li><a href="">August 2008 <small>3 Posts</small></a></li>
+            	<li><a href="">July 2008 <small>1 Posts</small></a></li>
+			</ul>
+        </div>
+        <div style="display: block;" id="content_3" class="content">
+        	<ul>
+            	<li><a href="">Home</a></li>
+            	<li><a href="">About</a></li>
+            	<li><a href="">Contribute</a></li>
+            	<li><a href="">Contact</a></li>
+			</ul>
+        </div>
+    
+    </div>
+
+</div>
+
+
+</body></html>

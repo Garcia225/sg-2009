@@ -1,0 +1,148 @@
+BODY
+{
+	font-family:Tahoma;
+	font-size:12px;
+	background-color:White;
+}
+.Label
+{
+	font-family:Tahoma;
+	font-size:12px;
+    COLOR: black;
+    TEXT-INDENT: 3px;
+    TEXT-ALIGN: right;
+    TEXT-DECORATION: none
+}
+.Chain
+{
+	font-family:Tahoma;
+	font-size:12px;
+    COLOR: black;
+}
+INPUT
+{
+	font-family:Tahoma;
+	font-size:12px;
+}
+.Mandatory
+{
+	background-color:#FFFFC0;
+}
+TEXTAREA
+{
+	font-family:Tahoma;
+	font-size:12px;
+}
+SELECT
+{
+	font-family:Tahoma;
+	font-size:12px;
+}
+BUTTON
+{
+	font-family:Tahoma;
+	font-size:12px;
+}
+.DataGrid
+{
+	font-family:Tahoma;
+	font-size:12px;
+}
+.MenuItem
+{
+	text-decoration: none;
+	color:White;
+	font-family:Arial;
+	font-size:13px;
+	font-weight:bold;
+	cursor:hand;
+}
+.Caption
+{
+	font-family:Comic Sans MS;
+	color:blue;
+	font-size:22px;
+	font-weight:bold;
+}
+.User
+{
+	font-family:Tahoma;
+	font-size:12px;
+    COLOR: white;
+    border-left: solid 1px khaki;
+}
+.GridItemStyle
+{
+	font-family:Tahoma;
+	font-size:12px;
+	color:black;
+	background-color:white;
+}
+.GridItemStyleSelection
+{
+	font-family:Tahoma;
+	font-size:12px;
+	color:black;
+	background-color:white;
+	cursor:hand
+}
+.GridHeaderStyle
+{
+	font-family:Arial;
+	font-size:12px;
+	color:white;
+	font-weight:bold;
+	background-color:#AD1008;
+	text-align:center;
+}
+.GridHeaderStyleEvents
+{
+	font-family:Arial;
+	font-size:12px;
+	color:white;
+	font-weight:bold;
+	background-color:Navy;
+	text-align:center;
+}
+IMG
+{
+	border-style:none;
+}
+.HeaderToolbar
+{
+	BORDER-RIGHT: #cc9966 1px solid;
+	BORDER-TOP: #cc9966 1px solid;
+	BORDER-LEFT: #cc9966 1px solid;
+	background-color:WHITE;
+	font-family:Tahoma;
+	font-size:12px;
+	color:black;
+	font-weight:bold;
+}
+.FooterToolbar
+{
+	BORDER-RIGHT: #cc9966 1px solid;
+	BORDER-BOTTOM: #cc9966 1px solid;
+	BORDER-LEFT: #cc9966 1px solid;
+	background-color:WHITE
+}
+.Frame
+{
+	BORDER-RIGHT: #cc9966 1px solid;
+	BORDER-BOTTOM: #cc9966 1px solid;
+	BORDER-LEFT: #cc9966 1px solid;
+	BORDER-TOP: #cc9966 1px solid;
+	background-color:WHITE
+}
+.FramePopUp
+{
+	BORDER-RIGHT: #cc9966 1px solid;
+	BORDER-BOTTOM: #cc9966 1px solid;
+	BORDER-LEFT: #cc9966 1px solid;
+	BORDER-TOP: #cc9966 1px solid;
+	background-color:black
+}
+.Line
+{
+	BORDER-TOP: #cc9966 1px solid;
+}
