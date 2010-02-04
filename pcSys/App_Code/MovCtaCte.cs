@@ -275,4 +275,63 @@ public class MovCtaCte
         return sb.ToString();
 
     }
+
+    /*//cta cte
+            //Obtenemos el id de a cuenta del cliente
+            string consultaIdCtaCte = "SELECT num_cta_cte_pro from PCCC_CTA_CTE_PROVEEDOR where id_proveedor = "+IdProvedor;
+            //8
+            SqlCommand consultaCtaCte = new SqlCommand(consultaIdCtaCte, _conexion.getSqlConnection());
+            SqlDataReader readerCtaCte = consultaCtaCte.ExecuteReader();
+            string idCtaCte = "";
+            int getIdCtaCte = 0;
+            while (readerCtaCte.Read())
+            {
+                idCtaCte = readerCtaCte[0].ToString();
+            }
+            reader.Close();
+            getIdCtaCte = Convert.ToInt32(idCtaCte);*/
+
+    /// <summary>
+    /// Obtiene el id del mov de la cta cte proveedor
+    /// </summary>
+    /// <param name="idFactura"></param>
+    /// <returns></returns>
+    public string GetIdMovCtaCte(string idFactura)
+    {
+        Conexion _conexion = null;
+        int cont = 0;
+        try
+        {
+            //falta codigo para guardar mov de la cta cte de la factura
+            // Crear y abrir la conexión
+            _conexion = new Conexion();
+            _conexion.OpenConnection();
+
+            string consultaIdMovCtaCte = "SELECT id_mov_cta_cte_pro from PCCC_MOVIMIENTO_CTA_CTE_PROVEEDORES where id_factura = " + idFactura;
+            //8
+            SqlCommand consultaCtaCte = new SqlCommand(consultaIdMovCtaCte, _conexion.getSqlConnection());
+            SqlDataReader readerCtaCte = consultaCtaCte.ExecuteReader();
+
+            string idCtaCte = "";
+            int getIdCtaCte = 0;
+            while (readerCtaCte.Read())
+            {
+                idCtaCte = readerCtaCte[0].ToString();
+            }
+            readerCtaCte.Close();
+            //getIdCtaCte = Convert.ToInt32(idCtaCte);
+            if (idCtaCte == "")
+            {
+                return "0";
+            }
+            else
+            {
+                return idCtaCte;
+            }
+        }
+        catch (Exception e) {
+            return "ERRROR";
+        }
+
+    }
 }

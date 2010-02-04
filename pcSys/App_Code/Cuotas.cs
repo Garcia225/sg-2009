@@ -144,8 +144,9 @@ public class Cuotas
             procCuotas.Parameters.Add(new SqlParameter("@importe", Importe));
             procCuotas.Parameters.Add(new SqlParameter("@saldo", Saldo));
             procCuotas.Parameters.Add(new SqlParameter("@fecha_vencimiento", FechaVencimiento));
-            procCuotas.Parameters.Add(new SqlParameter("@id_forma_de_pago", IdFormaDePago));
+            procCuotas.Parameters.Add(new SqlParameter("@id_forma_pago", IdFormaDePago));
             procCuotas.Parameters.Add(new SqlParameter("@id_mov_cta_cte_pro", IdMovCtaCtePro));
+            // El procedimiento o la función 'sp_ab_cuotas' esperaba el parámetro '@id_forma_pago', que no se ha especificado
             //Ejecuto la consulta
             procCuotas.ExecuteNonQuery();
             return "OK";

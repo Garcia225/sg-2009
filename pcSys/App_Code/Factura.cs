@@ -23,7 +23,8 @@ public class Factura
                     string id_empleado,
                     string detalle_factura,
                     string _cantCuotas,
-                    string sumaResta)
+                    string sumaResta,
+                    string estado)
 	{
         idFactura= Convert.ToInt32(id_factura);
         idProveedor = Convert.ToInt32(id_proveedor);
@@ -35,6 +36,7 @@ public class Factura
         numFactura = Convert.ToInt32(num_factura);
         cantCuotas = Convert.ToInt32(_cantCuotas);
         suma_resta = sumaResta;
+        idEstado = Convert.ToInt32(estado);
         /*numRenglon = Convert.ToInt32(num_renglon);
         cantidad = Convert.ToInt32(_cantidad);
         idMateriaPrima = Convert.ToInt32(id_materia_prima);*/
@@ -159,6 +161,17 @@ public class Factura
 
     }
 
+    /// <summary>
+    /// Devuelve el id del estado
+    /// </summary>
+    private int idEstado;
+    public int IdEstado
+    {
+
+        set { idEstado = value; }
+        get { return idEstado; }
+
+    }
     #endregion
 
 
@@ -183,10 +196,10 @@ public class Factura
 
             //procedimiento cabecera
             SqlCommand proc = new SqlCommand("sp_ab_factura", _conexion.getSqlConnection());
-            SqlCommand procDetalle = new SqlCommand("sp_am_detalle_factura", _conexion.getSqlConnection());
+            //SqlCommand procDetalle = new SqlCommand("sp_am_detalle_factura", _conexion.getSqlConnection());
 
             proc.CommandType = CommandType.StoredProcedure;
-            procDetalle.CommandType = CommandType.StoredProcedure;
+            //procDetalle.CommandType = CommandType.StoredProcedure;
 
             //cabecera   
             //pasar los parametros al procedimiento almacenado
@@ -198,6 +211,7 @@ public class Factura
             proc.Parameters.Add(new SqlParameter("@total_factura", ToralFactura));//120000.0
             proc.Parameters.Add(new SqlParameter("@id_condicion_de_pago", Condicion));//1
             proc.Parameters.Add(new SqlParameter("@id_empleado", Empleado));//1
+            proc.Parameters.Add(new SqlParameter("@id_estado", IdFactura));
 
             proc.ExecuteNonQuery();
 
@@ -218,6 +232,7 @@ public class Factura
 
             ////////////////////////////////////////////////////////////////////////////////////////////
             /*ZONA SERIALIZAR*/
+            // La función o el procedimiento sp_am_detalle_factura tiene demasiados argumentos.
 
             //serliazador
             JavaScriptSerializer serializer = new JavaScriptSerializer();
@@ -236,6 +251,13 @@ public class Factura
             foreach (ArrayList arrayFila in arrayListPrincipal)
             {//[['2,'1,'12000,'24000']]
             // cant, codComp, costo, total
+                /*SqlCommand procDetalle = new SqlCommand("sp_abm_factura_det", _conexion.getSqlConnection());
+
+
+                procDetalle.CommandType = CommandType.StoredProcedure;*/
+                SqlCommand procDetalle = new SqlCommand("sp_am_detalle_factura", _conexion.getSqlConnection());
+                procDetalle.CommandType = CommandType.StoredProcedure;
+
                 cont++;
                 string cantidad = arrayFila[0].ToString();//"2"
                 string codComp = arrayFila[1].ToString();//"1"
@@ -259,7 +281,7 @@ public class Factura
             //cta cte
             //Obtenemos el id de a cuenta del cliente
             string consultaIdCtaCte = "SELECT num_cta_cte_pro from PCCC_CTA_CTE_PROVEEDOR where id_proveedor = "+IdProvedor;
-
+            //8
             SqlCommand consultaCtaCte = new SqlCommand(consultaIdCtaCte, _conexion.getSqlConnection());
             SqlDataReader readerCtaCte = consultaCtaCte.ExecuteReader();
             string idCtaCte = "";
@@ -793,6 +815,70 @@ public class Factura
         }
         return sb.ToString();
 
+    }
+
+    /// <summary>
+    /// Retorna el uñtimo id de la fatura guardada
+    /// </summary>
+    /// <returns></returns>
+    public string ultimoGuardado() {
+
+        Conexion _conexion = null;
+        int cont = 0;
+        try
+        {
+            //falta codigo para guardar mov de la cta cte de la factura
+            // Crear y abrir la conexión
+            _conexion = new Conexion();
+            _conexion.OpenConnection();
+            string consultaMax = "Select max(id_factura) from PCCC_FACTURA";
+
+            SqlCommand consulta = new SqlCommand(consultaMax, _conexion.getSqlConnection());
+            SqlDataReader reader = consulta.ExecuteReader();
+            string numero = "";
+            while (reader.Read())
+            {
+                numero = reader[0].ToString();
+            }
+            reader.Close();
+            return numero;
+        }catch (Exception exc){
+            return "ERROR";
+        }
+    }
+
+    /// <summary>
+    /// Obtiene el id de un estdo determinado
+    /// </summary>
+    /// <param name="estado"></param>
+    /// <returns></returns>
+    public string getEstado(string estado)
+    {
+
+        Conexion _conexion = null;
+        int cont = 0;
+        try
+        {
+            //falta codigo para guardar mov de la cta cte de la factura
+            // Crear y abrir la conexión
+            _conexion = new Conexion();
+            _conexion.OpenConnection();
+            string consultaEstado = "Select id_estado from PCCC_ESTADO where descripcion = '"+estado+"'";
+            // El nombre de columna 'PAGADO' no es válido
+            SqlCommand consulta = new SqlCommand(consultaEstado, _conexion.getSqlConnection());
+            SqlDataReader reader = consulta.ExecuteReader();
+            string numero = "";
+            while (reader.Read())
+            {
+                numero = reader[0].ToString();
+            }
+            reader.Close();
+            return numero;
+        }
+        catch (Exception exc)
+        {
+            return "ERROR";
+        }
     }
 }
 
