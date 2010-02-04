@@ -174,7 +174,64 @@ public class Factura
     }
     #endregion
 
+    /// <summary>
+    /// Trae todas las facturas registradas
+    /// </summary>
+    /// <returns></returns>
+    public static string DataSet()
+    {
 
+        Serializador serial = new Serializador();
+        StringBuilder sb = new StringBuilder();
+        Conexion conexion = null;
+
+        try
+        {
+
+            conexion = new Conexion();
+
+            //adaptador de datos
+            SqlDataAdapter comando = new SqlDataAdapter();
+
+            //crea el data set
+            DataSet dataSet = new DataSet();
+
+            //abre la conexion
+            conexion.OpenConnection();
+
+            conexion.getSqlConnection().BeginTransaction();
+
+            //crear sentencia sql
+            StringBuilder sentencia = new StringBuilder();
+
+            //CAMBIARRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRR
+            
+            //sentencia.Append(" select numFac, razonSocial, totalFac, fecha, id_proveedor, id_usuario  from viewFatura");
+            sentencia.Append(" select numFac, razonSocial, totalFac, fecha, id_proveedor from viewFatura");
+
+            //carga el data set
+
+            comando = new SqlDataAdapter(sentencia.ToString(), conexion.getConectionString());
+            //llena el dataset
+            comando.Fill(dataSet, "viewFatura");
+
+
+            //serializar dataset
+            sb.Append(serial.JSON(dataSet.Tables["viewFatura"]));
+        }
+        catch (Exception error)
+        {
+            sb.Append(error);
+        }
+        finally
+        {
+            conexion.CloseConnection();
+        }
+
+
+        return sb.ToString();
+
+    }
 
     /// <summary>
     /// Guarda una factura con sus detalles

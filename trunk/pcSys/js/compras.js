@@ -5,6 +5,7 @@ var _idProveedor = 0;
 var _estado = "";
 var _idBanco = 0;
 var _movIdCtaCte = 0;
+var tablaFactura;
 
 $(document).ready(function() {
 //btEditar
@@ -16,11 +17,59 @@ $("input[id*=btEliminar]").css("display", "none");
 $("input[id*=btGuardar]").css("display", "none");
 $("input[id*=btCancelar]").css("display", "none");
 
+
+
+	$.ajax({
+        type:"POST", 
+        dataType: "json", 
+        contentType: "application/json; charset=utf-8",
+        url:"Compras.aspx/getFacturas",  //invocar al metodo del servidor que devulve un datatable 
+        data:"{}",
+        success:  function armarTabla(datatable_servidor){//ver el funcionamiento
+            //obtengo el id de la tabla donde se generará la tabla dinamica
+            tablaFactura = $('#tablaFactura').dataTable({
+		  	    "aaData": eval(datatable_servidor),     //armar tabla con el arreglo serializado del serividor
+		  	    "aoColumns": [ 
+		  	            { "sTitle": "Numero" },           
+				        { "sTitle": "Razon Social" },
+						{ "sTitle": "Total" },
+						{ "sTitle": "Fecha" },
+						{ "sTitle": "Anular", "bSortable": false,
+                    "fnRender": function(obj) {
+                        //var idFacturaDet = obj.aData[obj.iDataColumn];
+                        var idFacturaBoton = obj.aData[0];
+                        var sReturn = '<center><A href="#"><IMG id="'+idFacturaBoton+'"  onclick="borrarPersona(this); return false;" src="../images/delete.ico" style="width: 16px; height: 16px; border-left-color: yellow; border-bottom-color: yellow; border-top-style: none; border-top-color: yellow; border-right-style: none; border-left-style: none; border-right-color: yellow; border-bottom-style: none;"  ></a></center>';
+                        return sReturn;
+                        }
+                    }
+                     ],
+		  	    "oLanguage": {                    //setear variables por defecto al idioma español
+                    "sProcessing": "Procesando...",              
+                    "sLengthMenu": "Mostrar _MENU_ registros",
+                    "sZeroRecords": "No se encontraron resultados",
+                    "sInfo": "(_START_-_END_) de _TOTAL_ registros",
+                    "sInfoEmpty": "(0-0) de 0 registros",
+                    "sInfoFiltered": "(_MAX_ registros en total)",
+                    "sSearch": "Buscar:"
+                }
+            });
+        },  
+        //tirar mensaje de error en caso que la llamada ajax tenga problemas
+        error: function(msg){ 
+            alert("No se pudo cargar la tabla");
+        }
+    });//fin de llamada ajax
+    
+    
+    
+    
+
+
+
 $("#divCuotas").slideUp();
         //control de checkbox condicion de pago
      $("#cbCredito").change(function(){
         _estado = "Credito";
-        alert(_estado);
         if ($("#cbCredito").is(":checked")) {
           document.forms[0].cbContado.checked = false;
           $("#lbContado").removeClass("LabelSelected");
@@ -36,8 +85,8 @@ $("#divCuotas").slideUp();
       
           //control de checkbox condicion de pago
      $("#cbContado").change(function(){
-      _estado = "Contado"
-      alert(_estado);
+      _estado = "Contado";
+      
         if ($("#cbContado").is(":checked")) {
           document.forms[0].cbCredito.checked = false;
           $("#lbCredito").removeClass("LabelSelected");
@@ -213,10 +262,9 @@ function obtenerResultadoProveedor(row){
     var codigo = row.split("|")[0];
     //asignar codigo a variable global
     _idProveedor = codigo;
-    alert("EL ID DEL PROVEEDORE ESSSSSSSSSSS ->"+_idProveedor);
     rellenarCamposProveedor(_idProveedor);
     _movIdCtaCte = getIdMovCtaCte(_idProveedor);
-    alert("el movimiento es "+_movIdCtaCte);
+    
 }
 
 
@@ -419,12 +467,11 @@ function guardarFactura() {
         var condicion_pago = 2;
         alert("Credito");
     }*/
-    alert("Esta dentro de guardar");
     
         
     var id_factura = '1';
     var proveedor = _idProveedor;//$("select[id*=chProveedor]").val();
-    alert("PROVEEDORRRRR "+_idProveedor);
+    //alert("PROVEEDORRRRR "+_idProveedor);
     //return false;
     var fecha = $("input[id*=tbFecha]").val();
     var total_factura = $("input[id*=tbTotal]").val();
@@ -461,7 +508,7 @@ function guardarFactura() {
         sumaResta = "S"; 
         cant_cuotas = "0";
     }
-    alert("num_cheque "+num_cheque+" _idBanco "+_idBanco+" opcion "+opcion);
+    //alert("num_cheque "+num_cheque+" _idBanco "+_idBanco+" opcion "+opcion);
     //return false;
     /*id_factura,  
     proveedor,  
@@ -474,7 +521,7 @@ function guardarFactura() {
     num_cheque,
     id_banco,  
     opcion, */
-    alert("Suma o Resta "+sumaResta);
+    //alert("Suma o Resta "+sumaResta);
     var numCuota = 0;
     //var cantCuotas = $("input[id*=tbCantCuotas]").val();//
     var cantCuotas = cant_cuotas;
@@ -516,10 +563,10 @@ function guardarFactura() {
             url:"Compras.aspx/GuardarFactura",
             data: parametros, 
              success: function(data){
-                if(data == 'OK'){
-                
+                if(data == 'EXITO'){
+                    recargar();
                              }else{
-                             
+                             alert("Ocurrio un error durante proceso");
                              }
                         }
                     });//fin ajax
@@ -578,6 +625,26 @@ function getIdMovCtaCte(idFactura){
                 }
         });//fin ajax
         return false;
+}
+ 
+ /*Actualiza la tabla*/
+function recargar()
+{
+    $.ajax({
+        type:"POST", 
+        dataType: "json", 
+        contentType: "application/json; charset=utf-8",
+        url:"Compras.aspx/getFacturas",  //invocar al metodo del servidor que devulve un datatable 
+        data:"{}",
+        success:  function armarTabla(json){//ver el funcionamiento
+            //vacia la tabla
+            tablaFactura.fnClearTable(tablaFactura);
+            //recarga con los nuevos datos
+            tablaFactura.fnAddData(eval(json));
+            //repintar la tabla  
+            this.fnDraw(that);
+          }
+          });
 }
  
 //Obtiene y carga en el campo Fecha Alta la fecha del dia

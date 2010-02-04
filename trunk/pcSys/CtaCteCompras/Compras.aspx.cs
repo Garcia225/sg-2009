@@ -20,10 +20,17 @@ public partial class Compras : System.Web.UI.Page
         if (!IsPostBack)
         {
             Utility.RegisterTypeForAjax(typeof(Compras));
-            //Utility.RegisterTypeForAjax(typeof(Factura));
+            Utility.RegisterTypeForAjax(typeof(Factura));
         }
     }
-
+    
+    ///
+    [System.Web.Services.WebMethod()]
+    public static string getFacturas()
+    {
+        // Pide el dataset a la clase Proveedor y lo devuelve
+        return Factura.DataSet();
+    }
 
     /// <summary>
     /// Trae una lista de todos los datos de una persona
@@ -349,9 +356,10 @@ public partial class Compras : System.Web.UI.Page
             string ultimo = factura.ultimoGuardado();//75
             string idMov = mov.GetIdMovCtaCte(ultimo);//11
             //obtener de alguna forma el mov cta cte pro
-            for (i = 0; i < (Convert.ToInt32(cantCuotas)); i++ ) { 
-            Cuotas cuota = new Cuotas("1", (i+1).ToString(), cantCuotas, importe, saldo, fechaVencimiento, idFormaPago, idMov);
-            cuota.Guardar();
+            for (i = 0; i < (Convert.ToInt32(cantCuotas)); i++ ) {
+                int importeCuota = ((Convert.ToInt32(importe)) / (Convert.ToInt32(cantCuotas)));
+                Cuotas cuota = new Cuotas("1", (i + 1).ToString(), cantCuotas, importeCuota.ToString(), importeCuota.ToString(), fechaVencimiento, idFormaPago, idMov);
+                cuota.Guardar();
             }
         return "EXITO";
              
@@ -365,7 +373,8 @@ public partial class Compras : System.Web.UI.Page
 
             Cheques cheque = new Cheques(total_factura, num_cheque, fecha, id_banco);
             //factura.Guardar();
-            return cheque.Guardar();
+            cheque.Guardar();
+            return "EXITO";
         }
         return "ERROR";
     }
