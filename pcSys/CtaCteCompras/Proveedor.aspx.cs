@@ -81,10 +81,20 @@ public partial class Personas : System.Web.UI.Page
     [System.Web.Services.WebMethod()]
     public static string borrar(string idProveedor, string razon_social, string nombre, string apellido, string num_doc, string dir, string telefono, string tipo_doc)
     {
-        Proveedores proveedor = new Proveedores(idProveedor, razon_social, nombre, apellido, num_doc, dir, telefono, tipo_doc);
-         
-        //Persona persona = new Persona(num_doc, tipo_doc, nombre, apellido, dir, email, nacionalidad, sexo, fechaNac);
-        return proveedor.Borrar();
+        Proveedores prov = new Proveedores();
+        string deudas = prov.comprobarDeudas(idProveedor);
+        if (deudas != "")
+        {
+            return "ERROR";
+        }
+        else {
+            Proveedores proveedor = new Proveedores(idProveedor, razon_social, nombre, apellido, num_doc, dir, telefono, tipo_doc);
+
+            //Persona persona = new Persona(num_doc, tipo_doc, nombre, apellido, dir, email, nacionalidad, sexo, fechaNac);
+            proveedor.Borrar();
+            return "EXITO";
+            //return "SI";
+        }
     }
    
     /// <summary>

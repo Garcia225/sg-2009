@@ -240,6 +240,32 @@ function popupEliminarPersona() {
     return false;
 }
 
+function popupProveedorDeudas() {
+    $(function() {
+	    $("div[id*=proveedorDeuda]").dialog({
+		    bgiframe: true,
+		    resizable: false,
+		    modal: true,
+		    hide: true,
+		    width: 380,
+		    overlay: {
+			    backgroundColor: '#000',
+			    opacity: 0.5
+		    },
+	        close: function() {
+			    $(this).dialog('destroy');
+		    },
+		    buttons: {
+		     'Aceptar': function(){
+		        $(this).dialog('destroy');
+		        
+		    }
+		    }
+	    });
+    });
+    return false;
+}
+
 /*Borra un registro en la base de datos*/
 function borrar()
 {  
@@ -266,7 +292,7 @@ function borrar()
              "'telefono':'', " + 
              "'tipo_doc':'0'}",
              success: function(data){
-                if(data == 'OK'){
+                if(data == 'EXITO'){
                     recargar(); 
                     $("label[id*=lbError]").text("El Registro ha sido guardado correctamente");
                     limpiarCampos();
@@ -275,7 +301,8 @@ function borrar()
                     $("input[id*=imgbtNuevo]").css("display", "inline");
                     
                              }else{
-                                  $("label[id*=lbMsn]").text("Ha ocurrido un error durante el proceso");
+                                popupProveedorDeudas();
+                                  //$("label[id*=lbMsn]").text("Ha ocurrido un error durante el proceso");
                              }
                         }
                     });//fin llamada ajax al servidor

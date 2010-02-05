@@ -207,7 +207,7 @@ public class Factura
             //CAMBIARRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRR
             
             //sentencia.Append(" select numFac, razonSocial, totalFac, fecha, id_proveedor, id_usuario  from viewFatura");
-            sentencia.Append(" select numFac, razonSocial, totalFac, fecha, id_proveedor from viewFatura");
+            sentencia.Append(" select cod, numFac, razonSocial, totalFac, fecha, contado, id_proveedor from viewFatura");
 
             //carga el data set
 
@@ -268,7 +268,7 @@ public class Factura
             proc.Parameters.Add(new SqlParameter("@total_factura", ToralFactura));//120000.0
             proc.Parameters.Add(new SqlParameter("@id_condicion_de_pago", Condicion));//1
             proc.Parameters.Add(new SqlParameter("@id_empleado", Empleado));//1
-            proc.Parameters.Add(new SqlParameter("@id_estado", IdFactura));
+            proc.Parameters.Add(new SqlParameter("@id_estado", IdEstado));
 
             proc.ExecuteNonQuery();
 
@@ -368,6 +368,56 @@ public class Factura
         catch (Exception s) {
  
          return "ERROR";
+
+        }
+    }
+
+    /// <summary>
+    /// Anula la factura
+    /// </summary>
+    /// <returns></returns>
+    public string Anular()
+    {
+        Conexion _conexion = null;
+        int cont = 0;
+        try
+        {
+            //falta codigo para guardar mov de la cta cte de la factura
+            // Crear y abrir la conexión
+            _conexion = new Conexion();
+            _conexion.OpenConnection();
+
+            // Opcion a realizarce dentro del procedimiento almacenado
+            int opcion = 3;
+
+            //procedimiento cabecera
+            SqlCommand proc = new SqlCommand("sp_ab_factura", _conexion.getSqlConnection());
+            //SqlCommand procDetalle = new SqlCommand("sp_am_detalle_factura", _conexion.getSqlConnection());
+
+            proc.CommandType = CommandType.StoredProcedure;
+            //procDetalle.CommandType = CommandType.StoredProcedure;
+
+            //cabecera   
+            //pasar los parametros al procedimiento almacenado
+            proc.Parameters.Add(new SqlParameter("@opcion", opcion));//1
+            proc.Parameters.Add(new SqlParameter("@id_proveedor", "" + IdProvedor));//1
+            proc.Parameters.Add(new SqlParameter("@num_factura", "" + NumFactura));//1
+            proc.Parameters.Add(new SqlParameter("@id_factura", IdFactura));//1
+            proc.Parameters.Add(new SqlParameter("@fecha", Fecha));//24/11/2009 0:00:00
+            proc.Parameters.Add(new SqlParameter("@total_factura", ToralFactura));//120000.0
+            proc.Parameters.Add(new SqlParameter("@id_condicion_de_pago", Condicion));//1
+            proc.Parameters.Add(new SqlParameter("@id_empleado", Empleado));//1
+            proc.Parameters.Add(new SqlParameter("@id_estado", IdEstado));
+
+            proc.ExecuteNonQuery();
+
+            return "OK";
+
+        }
+        catch (Exception s)
+        {
+
+            return "ERROR";
 
         }
     }
@@ -555,8 +605,12 @@ public class Factura
             //crear sentencia sql
             StringBuilder sentencia = new StringBuilder();
 
-            sentencia.Append("Select id_factura, num_factura, fecha, total_factura ");
+            /*sentencia.Append("Select id_factura, num_factura, fecha, total_factura ");
             sentencia.Append("from viewFacturas where id_proveedor = @idProveedor and id_estado=1 ");
+            */
+            
+            sentencia.Append("Select cod, numFac, fecha, totalFac ");
+            sentencia.Append("from viewFatura where id_proveedor = @idProveedor and contado = 'N'");
 
             //carga el data set
 
@@ -921,6 +975,40 @@ public class Factura
             _conexion = new Conexion();
             _conexion.OpenConnection();
             string consultaEstado = "Select id_estado from PCCC_ESTADO where descripcion = '"+estado+"'";
+            // El nombre de columna 'PAGADO' no es válido
+            SqlCommand consulta = new SqlCommand(consultaEstado, _conexion.getSqlConnection());
+            SqlDataReader reader = consulta.ExecuteReader();
+            string numero = "";
+            while (reader.Read())
+            {
+                numero = reader[0].ToString();
+            }
+            reader.Close();
+            return numero;
+        }
+        catch (Exception exc)
+        {
+            return "ERROR";
+        }
+    }
+
+    /// <summary>
+    /// Obtiene el id de la condicion
+    /// </summary>
+    /// <param name="condicion"></param>
+    /// <returns></returns>
+    public string getCondicion(string condicion)
+    {
+
+        Conexion _conexion = null;
+        int cont = 0;
+        try
+        {
+            //falta codigo para guardar mov de la cta cte de la factura
+            // Crear y abrir la conexión
+            _conexion = new Conexion();
+            _conexion.OpenConnection();
+            string consultaEstado = "Select id_condicion_de_pago from PCCC_CONDICION_DE_PAGO where contado = '" + condicion + "'";
             // El nombre de columna 'PAGADO' no es válido
             SqlCommand consulta = new SqlCommand(consultaEstado, _conexion.getSqlConnection());
             SqlDataReader reader = consulta.ExecuteReader();

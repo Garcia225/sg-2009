@@ -65,8 +65,12 @@ public partial class Compras : System.Web.UI.Page
             //crear sentencia sql
             StringBuilder sentencia = new StringBuilder();
 
-            sentencia.Append(" SELECT id_proveedor, ");
+            /*sentencia.Append(" SELECT id_proveedor, ");
             sentencia.Append(" nombre, apellido, razon_social ");
+            sentencia.Append(" FROM PCCC_PROVEEDORES where borrado = 'N'");
+            */
+            sentencia.Append(" SELECT id_proveedor, ");
+            sentencia.Append(" apellido, razon_social ");
             sentencia.Append(" FROM PCCC_PROVEEDORES where borrado = 'N'");
 
             //carga el data set
@@ -347,9 +351,10 @@ public partial class Compras : System.Web.UI.Page
         int i = 0;
         if (opcion == "Credito")
         {
-            string estado = fac.getEstado("PAGADO");
+            string estado = fac.getEstado("PENDIENTE");
+            string condicion = fac.getCondicion("N");
             // Pide los datos a la clase Cliente y lo devuelve
-            Factura factura = new Factura(id_factura, proveedor, num_factura, fecha, total_factura, condicion_pago, empleado, detalle_factura, cantCuotas, sumaResta, estado);
+            Factura factura = new Factura(id_factura, proveedor, num_factura, fecha, total_factura, condicion, empleado, detalle_factura, cantCuotas, sumaResta, estado);
             factura.Guardar();
             //fac.getEstado(opcion.ToUpper());
             //factura.Guardar();
@@ -405,6 +410,14 @@ public partial class Compras : System.Web.UI.Page
         return mov.GetMovCtaCte(idFactura);
     }
 
-    //GetMovCtaCte(string idFactura)
+    [System.Web.Services.WebMethod()]
+    public static string AnularFactura(string id_factura)
+    {//11
+        Factura fac = new Factura();
+        string estado = fac.getEstado("ANULADO");
+        Factura factura = new Factura(id_factura, "0", "0", "01/01/2009", "0", "0", "0", "0", "0", "0", estado);
+        factura.Anular();
+        return "EXITO";
+    }
 }
 

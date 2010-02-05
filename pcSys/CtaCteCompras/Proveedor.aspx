@@ -67,6 +67,8 @@
             $("#aspnetForm").validate({
                 //definir reglas
                 rules: {  
+                //
+                    <%= tbRazonSocial.UniqueID %>: { required: true},
                     <%= tbNumDoc.UniqueID %>: { required: true},
                     <%= tbApellido.UniqueID %>: { required: true},
                     <%= tbDireccion.UniqueID %>: { required: true}
@@ -74,6 +76,7 @@
                 },
                 //mensajes a mostrar en caso que no se cumplan las reglas
                  messages: {
+                   <%= tbRazonSocial.UniqueID %>: { required: "Campo Obligatorio"},
                    <%= tbNumDoc.UniqueID %>: { required: "Campo Obligatorio"},
                    <%= tbApellido.UniqueID %>: { required: "Campo Obligatorio"},
                    <%= tbDireccion.UniqueID %>: { required: "Campo Obligatorio"}
@@ -159,21 +162,22 @@ function cancela() {
                                 <table runat="server" style="width: 100%">
                                     <tr>
                                         <td align="right">
-                                            <asp:Label ID="lbRazonSocial" Text="Razon Social" runat="server" Font-Bold="True"
+                                            <asp:Label ID="lbRazonSocial" Text="Nombre o Razon Social" runat="server" Font-Bold="True"
                                                 ForeColor="Gray"></asp:Label>&nbsp;
                                         </td>
                                         <td align="left">
                                             <asp:TextBox ID="tbRazonSocial" runat="server" Width="350px" MaxLength="50"></asp:TextBox>
-                                        </td>
+                                        <font
+                                                color="red">*</font></td>
                                     </tr>
-                                    <tr>
+                                    <%--<tr>
                                         <td align="right" class="labels">
                                             <asp:Label ID="lbNombre" Text="Nombre" runat="server" Font-Bold="True"></asp:Label>&nbsp;
                                         </td>
                                         <td align="left">
                                             <asp:TextBox ID="tbNombre" runat="server" Width="210px" MaxLength="30"></asp:TextBox>
                                         </td>
-                                    </tr>
+                                    </tr>--%>
                                     <tr>
                                         <td align="right" class="labels">
                                             <asp:Label ID="lbApellido" Text="Apellido" runat="server" Font-Bold="True"></asp:Label>&nbsp;
@@ -293,11 +297,18 @@ function cancela() {
                 </tr>
             </table>
             <!--PopUp-->
-            <!-- Elimina a una persona -->
+            <!-- Elimina a una proveedor -->
             <div style="display: none;">
                 <div id="eliminarPersona" title="Eliminar Proveedor">
                     <!-- Mensaje de Confirmacion -->
                     Esta seguro que desea eliminar al proveedor seleccionado?
+                </div>
+            </div>
+              <!-- Proveedor con deudas -->
+            <div style="display: none;">
+                <div id="proveedorDeuda" title="No se puede eliminar proveedor">
+                    <!-- Mensaje de Confirmacion -->
+                    El proveedor no puede ser eliminado ya que aun posee facturas pendientes de pago
                 </div>
             </div>
        <%-- </form>--%>
