@@ -103,13 +103,13 @@ function autocompleteProveedor() {
                         $("input[id*=tbDoc]").val("");
                         $("input[id*=tbDireccion]").val("");
                         //oTableFactura.fnClearTable(oTableFactura);
-                        return row[0] + " "+ row[1]+" "+row[2]+" "+row[3];
+                        return row[0] + " "+ row[1]+" "+row[2];
                     },
                     formatMatch: function(row, i, max) {
                         $("input[id*=tbDoc]").val("");
                         $("input[id*=tbDireccion]").val("");
                         //oTableFactura.fnClearTable(oTableFactura);
-                        return row[0] +"|"+ row[1]+"|"+row[2]+"|"+row[3];
+                        return row[0] +"|"+ row[1]+"|"+row[2];
                     },
                     formatResult: function(row) {
                         //_idProveedor = row[0];

@@ -25,7 +25,7 @@ public class Proveedores
                         string _telefono,
                         string _id_tipo_doc)
 	{
-
+        //select id_proveedor from viewFatura where contado = 'N' and id_proveedor = 17
         idProveedor = Convert.ToInt32(id_proveedor);
         razonSocial = razon_social;
         nombre = _nombre;
@@ -505,5 +505,39 @@ public class Proveedores
 
         return sb.ToString();
 
+    }
+
+    /// <summary>
+    /// Comprueba si el proveedor posee facturas pendientes de pago
+    /// </summary>
+    /// <param name="idProveedor"></param>
+    /// <returns></returns>
+    public string comprobarDeudas(string idProveedor)
+    {
+
+        Conexion _conexion = null;
+        int cont = 0;
+        try
+        {
+            //falta codigo para guardar mov de la cta cte de la factura
+            // Crear y abrir la conexión
+            _conexion = new Conexion();
+            _conexion.OpenConnection();
+            string consultaEstado = "select id_proveedor from viewFatura where contado = 'N' and id_proveedor = " + idProveedor ;
+            // El nombre de columna 'PAGADO' no es válido
+            SqlCommand consulta = new SqlCommand(consultaEstado, _conexion.getSqlConnection());
+            SqlDataReader reader = consulta.ExecuteReader();
+            string numero = "";
+            while (reader.Read())
+            {
+                numero = reader[0].ToString();
+            }
+            reader.Close();
+            return numero;
+        }
+        catch (Exception exc)
+        {
+            return "ERROR";
+        }
     }
 }

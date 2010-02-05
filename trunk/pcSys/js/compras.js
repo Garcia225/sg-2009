@@ -6,6 +6,7 @@ var _estado = "";
 var _idBanco = 0;
 var _movIdCtaCte = 0;
 var tablaFactura;
+var _idFactura=0;
 
 $(document).ready(function() {
 //btEditar
@@ -30,15 +31,17 @@ $("input[id*=btCancelar]").css("display", "none");
             tablaFactura = $('#tablaFactura').dataTable({
 		  	    "aaData": eval(datatable_servidor),     //armar tabla con el arreglo serializado del serividor
 		  	    "aoColumns": [ 
+		  	            { "sTitle": "Cod" },
 		  	            { "sTitle": "Numero" },           
 				        { "sTitle": "Razon Social" },
 						{ "sTitle": "Total" },
 						{ "sTitle": "Fecha" },
+						{ "sTitle": "Contado" },
 						{ "sTitle": "Anular", "bSortable": false,
                     "fnRender": function(obj) {
                         //var idFacturaDet = obj.aData[obj.iDataColumn];
                         var idFacturaBoton = obj.aData[0];
-                        var sReturn = '<center><A href="#"><IMG id="'+idFacturaBoton+'"  onclick="borrarPersona(this); return false;" src="../images/delete.ico" style="width: 16px; height: 16px; border-left-color: yellow; border-bottom-color: yellow; border-top-style: none; border-top-color: yellow; border-right-style: none; border-left-style: none; border-right-color: yellow; border-bottom-style: none;"  ></a></center>';
+                        var sReturn = '<center><A href="#"><IMG id="'+idFacturaBoton+'"  onclick="anularFactura(this); return false;" src="../images/delete.ico" style="width: 16px; height: 16px; border-left-color: yellow; border-bottom-color: yellow; border-top-style: none; border-top-color: yellow; border-right-style: none; border-left-style: none; border-right-color: yellow; border-bottom-style: none;"  ></a></center>';
                         return sReturn;
                         }
                     }
@@ -154,6 +157,13 @@ function cancelarDetalle(){
     $("input[id*=btCancelar]").css("display", "none");
     return false;
 }
+//Llama al popUp que pregunta si se desea borrar
+function anularFactura(boton){
+    _idFactura = $(boton).attr("id");
+    //borrar();
+    popupanularFactura();
+    //return false;
+}
 
 function guardarDetalle(){
         //4ft5vhcf
@@ -220,14 +230,14 @@ function autocompleteProveedor() {
                     mustMatch: false,
                     autoFill: false,
                     formatItem: function(row, i, max) {
-                        return row[0] + " "+ row[1];
+                        return row[0] + " "+ row[2];
                     },
                     formatMatch: function(row, i, max) {
-                        return row[0] +"|"+ row[1];
+                        return row[0] +"|"+ row[2];
                     },
                     formatResult: function(row) {
                         _idProveedor = row[0];
-                        return row[1];
+                        return row[2];
                     }
                     }).result(function(e, i, row) {
 	                	obtenerResultadoProveedor(row);
@@ -646,6 +656,63 @@ function recargar()
           }
           });
 }
+
+/*Pregunta si se desea eliminar la factura seleccionada*/
+function popupanularFactura() {
+    $(function() {
+	    $("div[id*=anularFactura]").dialog({
+		    bgiframe: true,
+		    resizable: false,
+		    modal: true,
+		    hide: true,
+		    width: 380,
+		    overlay: {
+			    backgroundColor: '#000',
+			    opacity: 0.5
+		    },
+	        close: function() {
+			    $(this).dialog('destroy');
+		    },
+		    buttons: {
+		    'Anular': function(){
+		        borrar();
+		        $(this).dialog('destroy');
+		        
+		    },
+		    'Cancelar': function(){
+		        $(this).dialog('destroy');
+		        
+		    }
+		    }
+	    });
+    });
+    return false;
+}
+
+/*Anula una Factura*/
+function borrar()
+{  
+    //alert("el cod de la factura es "+_idFactura);
+    // Llamada ajax al servidor para guardar los datos
+    $.ajax({
+            type:"POST",
+            dataType: "json", 
+            contentType: "application/json; charset=utf-8",
+            url:"Compras.aspx/AnularFactura",
+            data:"{" +
+             "'id_factura':'"+_idFactura+"'}",
+             success: function(data){
+                if(data == 'EXITO'){
+                    recargar(); 
+                             }else{
+                                  $("label[id*=lbMsn]").text("Ha ocurrido un error durante el proceso");
+                             }
+                        }
+                    });//fin llamada ajax al servidor
+                    return false;
+                   
+}
+
  
 //Obtiene y carga en el campo Fecha Alta la fecha del dia
 function fechaActual(){

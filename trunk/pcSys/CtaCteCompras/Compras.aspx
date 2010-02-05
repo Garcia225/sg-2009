@@ -9,10 +9,10 @@
     <script type="text/javascript" src="../js/jquery.autocomplete.js"></script>
 
     <script type="text/javascript" language="javascript" src="../js/jquery.validate.js"></script>
-<script type="text/javascript" language="javascript" src="../js/JSON.js"></script>
-    <script type="text/javascript" language="javascript" src="../js/compras.js"></script>
 
-    
+    <script type="text/javascript" language="javascript" src="../js/JSON.js"></script>
+
+    <script type="text/javascript" language="javascript" src="../js/compras.js"></script>
 
     <script type="text/javascript" src="../js/jquery.maskedinput-1.2.2.min.js"></script>
 
@@ -513,5 +513,13 @@ function cancela(){
                 </td>
             </tr>
         </table>
+        <!--PopUp-->
+        <!-- Elimina a una persona -->
+        <div style="display: none;">
+            <div id="anularFactura" title="Anular Factura">
+                <!-- Mensaje de Confirmacion -->
+                Esta seguro que desea anular la factura seleccionado?
+            </div>
+        </div>
     </div>
 </asp:Content>
