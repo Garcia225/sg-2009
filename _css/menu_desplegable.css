@@ -1,0 +1,52 @@
+body {
+  font-family: Helvetica, Arial, sans-serif;
+  font-size: 13px;
+}
+
+p {
+  line-height: 1.5em;
+}
+
+ul#menu_desplegable, ul#menu_desplegable ul {
+  list-style-type:none;
+  margin: 0;
+  padding: 0;
+  width: 160px;
+}
+
+ul#menu_desplegable a {
+  display: block;
+  text-decoration: none;	
+}
+
+ul#menu_desplegable li {
+  margin-top: 1px;
+}
+
+ul#menu_desplegable li a {
+	background:  #FFFFFF url("../_images/boton1.jpg");
+  color: #fff;	
+  padding: 0.5em;
+}
+
+ul#menu_desplegable  a:hover {
+  background: #3E8BB5;
+}
+
+ul#menu_desplegable li ul li a {
+  background: #CCC;
+  color: #000;
+  padding-left: 16px;
+}
+
+ul#menu_desplegable li ul li a:hover {
+  background: #aaa;
+  border-left: 5px #FFF solid;
+  padding-left: 15px;
+}
+
+.code { border: 1px solid #ccc; list-style-type: decimal-leading-zero; padding: 5px; margin: 0; }
+.code code { display: block; padding: 3px; margin-bottom: 0; }
+.code li { background: #ddd; border: 1px solid #ccc; margin: 0 0 2px 2.2em; }
+.indent1 { padding-left: 1em; }
+.indent2 { padding-left: 2em; }
