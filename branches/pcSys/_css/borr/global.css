@@ -1,0 +1,28 @@
+/******************************************************************** BODY*/
+body {	
+	background:				#f8f8f8;
+	color:					#000000;
+	font: 					normal 11px Tahoma;
+	margin:					0px;	
+	text-align:				center;
+}
+table						{ font-size:11px; font-family:Tahoma;}
+p 							{ line-height:150%; margin-bottom:1em; margin-top:1em;}
+h1							{ font-size: 25px; color:#bf7527; padding:0px; font-weight:normal; margin:0px;font-weight: bold;}
+
+/******************************************************************** MISCELANEOS*/
+.espaciador					{ background:url(../spacer.gif) center repeat-x;height:10px;}
+.nov 						{ font-size: 25px; color:#bf7527;font-weight: bold;}
+.titulos 					{ color: #0070a6; font-weight: bold;}
+.clear 						{ clear: both; overflow: hidden;}
+.explicaciones				{ color: #666666; font-size: 10px;}
+
+/******************************************************************** LISTAS*/
+.titulo_lista				{ background-color:#a6c82f; color:#FFFFFF; font-weight:bold; font-size:11px;}
+.fila_lista					{ background-color:#f1f1f3;}
+.fila_lista:hover			{ background-color:#e6ecd3;}
+.noConexion					{ background-color:#E4D3D3;}
+.paginacion					{ background-color:#d2d5d2; padding:0px;}
+.page 						{ text-decoration:none; color:#535151; font-weight:bold;}
+.page:hover					{ text-decoration:none; color:#7c1818; font-weight:bold;}
+

@@ -18,6 +18,20 @@ public partial class Personas : System.Web.UI.Page
         {
             //Utility.RegisterTypeForAjax(typeof(Personas));
             Utility.RegisterTypeForAjax(typeof(Proveedores));
+
+
+            Console.WriteLine("luisluisluisluis");
+            Console.WriteLine("luisluisluisluis");
+            Console.WriteLine("luisluisluisluis");
+            Console.WriteLine("luisluisluisluis");
+            Console.WriteLine("luisluisluisluis");
+            Console.WriteLine("luisluisluisluis");
+
+               
+
+            //string dir = HttpContext.Current.Request.Path;
+          //  RegisterStartupScript("PopupScript", "<script language='javascript'>alert('" + dir +"');</script>");
+  
          }
     }
 
