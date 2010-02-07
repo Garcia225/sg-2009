@@ -112,6 +112,13 @@
                     Debe ingresar solo numeros al campo
                 </div>
             </div>
+            
+            <div style="display: none;">
+                <div id="cuotaPagada" title="Pagado">
+                    <!-- Mensaje de Confirmacion -->
+                    La cuota seleccionada ya esta saldada
+                </div>
+            </div>
         <%-- </form>--%>
     </div>
 </asp:Content>

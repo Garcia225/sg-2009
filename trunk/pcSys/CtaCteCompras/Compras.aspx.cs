@@ -360,10 +360,11 @@ public partial class Compras : System.Web.UI.Page
             //factura.Guardar();
             string ultimo = factura.ultimoGuardado();//75
             string idMov = mov.GetIdMovCtaCte(ultimo);//11
+            fac.updateHaber(total_factura,proveedor);
             //obtener de alguna forma el mov cta cte pro
             for (i = 0; i < (Convert.ToInt32(cantCuotas)); i++ ) {
                 int importeCuota = ((Convert.ToInt32(importe)) / (Convert.ToInt32(cantCuotas)));
-                Cuotas cuota = new Cuotas("1", (i + 1).ToString(), cantCuotas, importeCuota.ToString(), importeCuota.ToString(), fechaVencimiento, idFormaPago, idMov);
+                Cuotas cuota = new Cuotas("1", (i + 1).ToString(), cantCuotas, importeCuota.ToString(), importeCuota.ToString(), fechaVencimiento, idFormaPago, estado, idMov);
                 cuota.Guardar();
             }
         return "EXITO";

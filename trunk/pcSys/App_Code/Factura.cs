@@ -666,7 +666,7 @@ public class Factura
             //crear sentencia sql
             StringBuilder sentencia = new StringBuilder();
 
-            sentencia.Append("select cuotas, numCuotas, importe, saldo, fechaVencimiento, idFactura, ctaCtePro ");
+            sentencia.Append("select cuotas, numCuotas, importe, saldo,interes, fechaVencimiento, idFactura, ctaCtePro ");
             //sentencia.Append("select cuotas, numCuotas, importe, saldo, fechaVencimiento, idFactura ");
             
             sentencia.Append("from viewCuotas where  idFactura = @idFactura");
@@ -1023,6 +1023,29 @@ public class Factura
         catch (Exception exc)
         {
             return "ERROR";
+        }
+    }
+
+    public void updateHaber(string monto, string id_Proveedor)
+    {
+
+        Conexion _conexion = null;
+        int cont = 0;
+        try
+        {
+            //falta codigo para guardar mov de la cta cte de la factura
+            // Crear y abrir la conexión
+            _conexion = new Conexion();
+            _conexion.OpenConnection();
+            string consultaEstado = "update PCCC_CTA_CTE_PROVEEDOR set haber = haber + "+monto+" where id_proveedor = "+id_Proveedor;
+            // El nombre de columna 'PAGADO' no es válido
+            SqlCommand consulta = new SqlCommand(consultaEstado, _conexion.getSqlConnection());
+            consulta.ExecuteReader();
+           
+        }
+        catch (Exception exc)
+        {
+            
         }
     }
 }
