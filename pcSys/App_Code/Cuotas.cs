@@ -19,6 +19,7 @@ public class Cuotas
                     string _saldo,
                     string _fecha_vecimiento,
                     string _id_forma_pago,
+                    string _idEstado,
                     string _id_mov_cta_cte_pro)
 	{
         try { 
@@ -30,6 +31,8 @@ public class Cuotas
         fechaVencimiento = Convert.ToDateTime(_fecha_vecimiento);
         idFormaDePago = Convert.ToInt32(_id_forma_pago);
         idMovCtaCtePro = Convert.ToInt32(_id_mov_cta_cte_pro);
+        idEstado = Convert.ToInt32(_idEstado);
+
     }catch(Exception error){
 
     }
@@ -106,6 +109,15 @@ public class Cuotas
         get { return idFormaDePago; }
     }
 
+    /// <summary>
+    /// Id de la forma de pago
+    /// </summary>
+    private int idEstado;
+    public int IdEstado
+    {
+        set { idEstado = value; }
+        get { return idEstado; }
+    }
 
     /// <summary>
     /// ID del movimiento
@@ -145,6 +157,7 @@ public class Cuotas
             procCuotas.Parameters.Add(new SqlParameter("@saldo", Saldo));
             procCuotas.Parameters.Add(new SqlParameter("@fecha_vencimiento", FechaVencimiento));
             procCuotas.Parameters.Add(new SqlParameter("@id_forma_pago", IdFormaDePago));
+            procCuotas.Parameters.Add(new SqlParameter("@id_estado", IdEstado));
             procCuotas.Parameters.Add(new SqlParameter("@id_mov_cta_cte_pro", IdMovCtaCtePro));
             // El procedimiento o la función 'sp_ab_cuotas' esperaba el parámetro '@id_forma_pago', que no se ha especificado
             //Ejecuto la consulta

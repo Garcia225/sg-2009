@@ -481,7 +481,7 @@ function guardarFactura() {
         
     var id_factura = '1';
     var proveedor = _idProveedor;//$("select[id*=chProveedor]").val();
-    //alert("PROVEEDORRRRR "+_idProveedor);
+    alert("PROVEEDORRRRR "+_idProveedor);
     //return false;
     var fecha = $("input[id*=tbFecha]").val();
     var total_factura = $("input[id*=tbTotal]").val();

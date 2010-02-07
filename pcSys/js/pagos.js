@@ -319,6 +319,7 @@ function listarCuotas(idFactura, fila) {
                     { "sTitle": "Nro. Cuota" },
                     { "sTitle": "Importe" },
                     { "sTitle": "Saldo" },
+                    { "sTitle": "Interes" },
                     { "sTitle": "Fecha de Vencimiento" },
                    { "sTitle": "Pago Parcial", "bSortable": false,
                     "fnRender": function(obj){
@@ -359,9 +360,6 @@ function listarCuotas(idFactura, fila) {
 
 
 function armarDetalle(datos, idFactura) {
-    //alert("La nueva tabla");
-    //alert("detalle" + idFactura);
-    //var html = '<p style="padding-left:50px; font-size:12pt"><u>Cuotas</u></p>';
     var html = '<label style="font-weight: bold; color: gray; text-decoration: underline">Cuotas</label>';
     html += '<div style="padding-left:50px;padding-bottom:15px"><table width="100%" cellpadding="5" cellspacing="0" border="1" id="detalle' + idFactura + '">';
     //cerrar tags
@@ -372,24 +370,16 @@ function armarDetalle(datos, idFactura) {
 
 
 function showDetail(idFactura) {
-    //alert("detalle");
-    //alert("idFactura "+idFactura);
-    /*alert($("img[id*=" + idFactura + "]").attr('src'));*/
     //obtengo la fila del boton seleccionado
-    
+    //actualizar los intereses si los hay
     
     var fila = $("img[id*=" + idFactura + "]").parents('tr:first');
     //_nTr = fila;
     if ($("img[id*=" + idFactura + "]").attr('src') == '../images/add.png') {
  
         $("img[id*=" + idFactura + "]").attr('src', '../images/minus.png');
-        //funcion que crea la tabla del detalle
-        //alert("nTr -> "+nTr);
-        
         listarCuotas(idFactura, fila);
         _movCtaCte = getMovCtaCte(idFactura);
-        //alert("Factura "+_movCtaCte);
-        //alert("Muestra el detalle");
         
     } else {
        $("img[id*=" + idFactura + "]").attr('src', '../images/add.png');
@@ -424,6 +414,26 @@ function recargar(idProveedor)
           });
 }
 
+/*Actualiza la tabla de las cuotas*/
+function recargarCuotas(idFactura)
+{
+    $.ajax({
+        type:"POST", 
+        dataType: "json", 
+        contentType: "application/json; charset=utf-8",
+        url: "Pagos.aspx/obtenerCuotas",  //invocar al metodo del servidor que devulve un datatable 
+        data:"{'idFactura':'"+ idFactura + "'}",
+        success:  function armarTabla(json){//ver el funcionamiento
+            //vacia la tabla
+            oTableCuota.fnClearTable(oTableCuota);
+            //recarga con los nuevos datos
+            oTableCuota.fnAddData(eval(json));
+            //repintar la tabla  
+            this.fnDraw(that);
+          }
+          });
+}
+
 /*Prepara la cuota a ser pagada*/
 function prepararCuota(idFactura){
     //var idMovCtaCtePro = getMovCtaCte(idFactura);
@@ -437,73 +447,32 @@ function prepararCuota(idFactura){
         var datos = oTableCuota.fnGetData(i);
         i++;
         // 0  es la posicion del checkbox en la tabla dinamica
-        var idCuota = ($(datos[6]).attr('id'));
+        var idCuota = ($(datos[7]).attr('id'));
         // campo editable es 0
-        var monto = ($(datos[5]).attr('id'));
+        var monto = ($(datos[6]).attr('id'));
         //crear arreglo bidimensional que será enviado como el detalle
         var filaArray = new Array();
         
         if ($("input[id=" + idCuota + "]").is(':checked')) {
-        importe = document.getElementById(monto).value; 
-        //alert("importe "+importe);
+        //Obtengo el importe que se desea pagar
+        importes = document.getElementById(monto).value; 
+        //Convierto el importe a int
+        var importe= parseInt(importes);
         
         idCuota = datos[0];
-        //alert(idCuota);
-        importeTotal = datos[3]
-        pagarCuotas(idCuota, importeTotal, _movCtaCte);
-        
-        return false;
-        if(importe == ""){
-            //alert("todo "+importeTotal);
+        //Obtengo el total de la cuota
+        importeTotal = datos[3];
+        //Pregunto si el campo imorte esta vacio
+        if(importes == ""){
+        //si lo esta se paga la cuota en su totalidad
             pagarCuotas(idCuota, importeTotal, _movCtaCte);
-        }else if (isNaN(importe)){
-        alert("");
-            if(importe < importeTotal){
-              pagarCuotas(idCuota, importe, _movCtaCte);
-            }else{
-                         $(function() {
-	    $("div[id*=alertMonto]").dialog({
-		    bgiframe: true,
-		    resizable: false,
-		    modal: true,
-		    hide: true,
-		    width: 380,
-		    overlay: {
-			    backgroundColor: '#000',
-			    opacity: 0.5
-		    },
-	        close: function() {
-			    $(this).dialog('destroy');
-		    },
-		    buttons: {
-		    'Aceptar': function(){
-		        $("input[id*="+_idFactura+"]").val('disabled');
-		        $(this).dialog('destroy');
-		        
-		    }
-		    }
-	    });
-    });
-            
-            }
-            //alert("parcial "+importe);
-            //alert("idCuota "+idCuota);
-            
-            //var idMovCtaCtePro = getMovCtaCte(idCuota);
-            //alert("idMovCtaCtePro "+idMovCtaCtePro);
-            //interes = datos[4];
-            //montoPagado = datos[5];
-            
-            //alert("importe "+importe);
-            //alert("montoParcial "+montoParcial);
-            //getMovCtaCte(idCuota, montoParcial);
-            
-            
-            
-            }else{
-            
-                         $(function() {
-	    $("div[id*=noNum]").dialog({
+        }else{//else 4 ver 
+        
+        //Pregunta si el importe total de la cuota es cero
+        if(importeTotal == 0){
+            //de ser asi lanza un mensaje avisando que la cuota ya fue pagado en su totalidad
+              $(function() {
+	    $("div[id*=cuotaPagada]").dialog({
 		    bgiframe: true,
 		    resizable: false,
 		    modal: true,
@@ -525,11 +494,83 @@ function prepararCuota(idFactura){
 		    }
 	    });
     });
-    
             
-            }
+        }else{//else 3
+      
+      //Pregunta si lo ingresado es letra
+       if (isNaN(importe)){
+       //en caso de que lo sea lanza un mensaje de error
+       //dialog
+         $(function() {
+	    $("div[id*=noNum]").dialog({
+		    bgiframe: true,
+		    resizable: false,
+		    modal: true,
+		    hide: true,
+		    width: 380,
+		    overlay: {
+			    backgroundColor: '#000',
+			    opacity: 0.5
+		    },
+	        close: function() {
+			    $(this).dialog('destroy');
+		    },
+		    buttons: {
+		    'Aceptar': function(){
+		        //$("input[id*="+_idFactura+"]").val('disabled');
+		        $(this).dialog('destroy');
+		        
+		    }
+		    }
+	    });
+    }); //fin dialog   
+            }else{//else 2
+              // En caso de que sea nmros
+              //Se convierte a int
+            var importeTotales = parseInt(importeTotal);
+            //y se pregunta si el monto ingresado es menor al total
+            if(importe < importeTotal){
+            //si es menor se realza el pago
+             pagarCuotas(idCuota, importe, _movCtaCte);
+            }else{ //else 1
+            //En caso contrario lanza un mensaje de error
+       //Dialog
+       $(function() {
+	    $("div[id*=alertMonto]").dialog({
+		    bgiframe: true,
+		    resizable: false,
+		    modal: true,
+		    hide: true,
+		    width: 380,
+		    overlay: {
+			    backgroundColor: '#000',
+			    opacity: 0.5
+		    },
+	        close: function() {
+			    $(this).dialog('destroy');
+		    },
+		    buttons: {
+		    'Aceptar': function(){
+		        $("input[id*="+_idFactura+"]").val('disabled');
+		        $(this).dialog('destroy');
+		      }
+		    }
+	    });
+    });//fin dialog
+            }//fin else 1
+                       
+            }//fin else 2
+            
+            }//fin else 3 
+            
+            }//fin else 4 
         }
     });
+    
+    recargarCuotas(idFactura);
+    alert(_idProveedor);
+    getCtaCte(_idProveedor);
+    //rellenarCamposProveedor(_idProveedor);
     return false;
 }
 

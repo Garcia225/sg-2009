@@ -138,7 +138,7 @@ public class NotaCredito
             proc.Parameters.Add(new SqlParameter("@total", TotalCredito));//120000.0
             proc.Parameters.Add(new SqlParameter("@motivo", Motivo));//1
             proc.Parameters.Add(new SqlParameter("@id_factura", IdFactura));//1
-
+            // No se encontró el procedimiento almacenado 'sp_abm_nota_credito'
             proc.ExecuteNonQuery();
             return "OK";
 
