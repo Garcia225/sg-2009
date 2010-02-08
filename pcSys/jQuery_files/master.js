@@ -9,6 +9,7 @@ function irTab1() {
     document.getElementById('tab2').setAttribute('class', 'tab');
     document.getElementById('tab3').setAttribute('class', 'tab');
     document.getElementById('tab4').setAttribute('class', 'tab');
+    document.getElementById('tab5').setAttribute('class', 'tab');
     return false;
 }
 
@@ -21,6 +22,7 @@ function irTab2() {
     document.getElementById('tab1').setAttribute('class', 'tab');
     document.getElementById('tab3').setAttribute('class', 'tab');
     document.getElementById('tab4').setAttribute('class', 'tab');
+    document.getElementById('tab5').setAttribute('class', 'tab');
     return false;
     }
 
@@ -32,6 +34,7 @@ function irTab3() {
     document.getElementById('tab2').setAttribute('class', 'tab');
     document.getElementById('tab1').setAttribute('class', 'tab');
     document.getElementById('tab4').setAttribute('class', 'tab');
+    document.getElementById('tab5').setAttribute('class', 'tab');
     return false;
 }
 
@@ -43,6 +46,19 @@ function irTab4() {
     document.getElementById('tab2').setAttribute('class', 'tab');
     document.getElementById('tab1').setAttribute('class', 'tab');
     document.getElementById('tab4').setAttribute('class', 'tab active');
+    document.getElementById('tab5').setAttribute('class', 'tab');
+    return false;
+}
+
+function irTab5() {
+     //La pagina donde lleva el link
+    window.location.href = 'ReporteFaturas.aspx';
+    //Activa la pestanha correspondiente
+    document.getElementById('tab3').setAttribute('class', 'tab');
+    document.getElementById('tab2').setAttribute('class', 'tab');
+    document.getElementById('tab1').setAttribute('class', 'tab');
+    document.getElementById('tab4').setAttribute('class', 'tab');
+    document.getElementById('tab5').setAttribute('class', 'tab active');
     return false;
 }
 

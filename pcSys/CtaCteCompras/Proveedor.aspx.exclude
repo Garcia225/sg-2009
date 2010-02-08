@@ -32,7 +32,7 @@
     <script type="text/javascript" src="../js/jquery.maskedinput-1.2.2.min.js"></script>
 
     <script type="text/javascript" src="../js/jquery.alphanumeric.pack.js"></script>
-
+    <script type="text/javascript" src="../js/notaCredito.js"></script>
     
     <script type="text/javascript">
 	document.getElementById('tab1').setAttribute('class', 'tab active');
@@ -52,8 +52,9 @@
     $("input[id*=imgbtBorrar]").css("display", "none");
     $("input[id*=imgbtEditar]").css("display", "none");
     $("input[id*=imgbtCancel]").css("display", "inline");
-    
-    
+    //
+    $("input[id*=tbApellido]").alpha();
+    $("#ctl00_ContentPlaceHolder1_tbDireccion").alpha();
     $("input[id*=tbTelefono]").numeric({allow:"()-"});
     $("input[id*=tbNumDoc]").numeric({allow:"-"});
     $("input[id*=tbFechaNac]").mask("99/99/9999");
@@ -183,8 +184,7 @@ function cancela() {
                                             <asp:Label ID="lbApellido" Text="Apellido" runat="server" Font-Bold="True"></asp:Label>&nbsp;
                                         </td>
                                         <td align="left">
-                                            <asp:TextBox ID="tbApellido" runat="server" Width="210px" MaxLength="30"></asp:TextBox><font
-                                                color="red">*</font>
+                                            <asp:TextBox ID="tbApellido" runat="server" Width="210px" MaxLength="30"></asp:TextBox>
                                         </td>
                                     </tr>
                                     <tr>
@@ -262,6 +262,11 @@ function cancela() {
                                     <td>
                                         <asp:ImageButton ID="imgbtGuardar" ToolTip="Guardar" runat="server" ImageUrl="../images/save.png" />
                                     </td>
+                                    
+                                    <td>
+                                        <asp:ImageButton ID="imgbtListar" ToolTip="Listar"  runat="server" OnClientClick="reporte(); return false;" ImageUrl ="~/images/list.ico" />
+                                    </td>
+                                    
                                     <td>
                                         <asp:ImageButton ID="imgbtdMod" ToolTip="Modificar" runat="server" ImageUrl="../images/save.png" />
                                     </td>

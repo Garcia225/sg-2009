@@ -31,7 +31,7 @@
     $(document).ready(function() {
     $("input[id*=tbNum]").numeric();
     $("input[id*=tbCant]").numeric();
-
+    $("input[id*=tbNroCheque]").numeric();
     $("input[id*=tbValor]").css("display", "none");
     $("span[id*=lbValor]").css("display", "none");
     autocompleteBancos();
@@ -400,7 +400,7 @@ function cancela(){
                                                 <tr>
                                                     <td align="right" style="width: 169px">
                                                         &nbsp; &nbsp; &nbsp; &nbsp;
-                                                        <asp:Label ID="Label4" Text="Condicion de Pago:" Font-Bold="True" runat="server"
+                                                        <asp:Label ID="Label4" Text="Forma de Pago:" Font-Bold="True" runat="server"
                                                             Width="110px"></asp:Label>
                                                     </td>
                                                     <td align="left">
