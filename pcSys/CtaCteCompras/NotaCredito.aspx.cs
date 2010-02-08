@@ -23,9 +23,9 @@ public partial class NotadeCredito : System.Web.UI.Page
         return factura.obtenerFactura(idProveedor);
     }
     [System.Web.Services.WebMethod()]
-    public static string guardar(string idNota,string num_nota,string fecha,string total_credito,string motivo,string id_factura)
+    public static string guardar(string idNota,string num_nota,string fecha,string total_credito,string motivo,string id_factura,string id_proveedor)
     {
-        NotaCredito nota = new NotaCredito(idNota, num_nota, fecha, total_credito, motivo, id_factura);
+        NotaCredito nota = new NotaCredito(idNota, num_nota, fecha, total_credito, motivo, id_factura, id_proveedor);
         return nota.Guardar();
     }
     [System.Web.Services.WebMethod()]
@@ -36,10 +36,10 @@ public partial class NotadeCredito : System.Web.UI.Page
         return notaC.getNotaCredito();
     }
     [System.Web.Services.WebMethod()]
-    public static string borrar(string idNota, string num_nota, string fecha, string total_credito, string motivo, string  id_factura)
+    public static string borrar(string idNota, string num_nota, string fecha, string total_credito, string motivo, string id_factura, string id_proveedor)
     {  
         // Pide los datos a la clase Factura y lo devuelve
-        NotaCredito notaCr = new NotaCredito(idNota, num_nota, fecha, total_credito, motivo, id_factura);
+        NotaCredito notaCr = new NotaCredito(idNota, num_nota, fecha, total_credito, motivo, id_factura,id_proveedor);
         return notaCr.Borrar();
     }
 }
