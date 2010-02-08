@@ -5,6 +5,7 @@ var _idProveedor = 0;
 // JScript File
 $(document).ready(function() {
     limpiarCampos();
+    $("input[id*=imgbtListar]").css("display", "inline");
     //inicia AJAX
 	$.ajax({
         type:"POST", 
@@ -407,4 +408,10 @@ function editar(){
     deshabilitarBotones();
     $("input[id*=imgbtdMod]").css("display", "inline");
     return false;
+}
+
+function reporte(){
+//"~/CtaCteCompras/reporteProveedores.aspx"
+window.location.href="reporteProveedores.aspx";
+return false;
 }

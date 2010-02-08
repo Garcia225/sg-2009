@@ -1,6 +1,7 @@
 ﻿// JScript File
 var _idProveedor=0;
 var _idFactura = 0;
+var codigo=0;
 
 $(document).ready(function(){
     fechaActual();
@@ -215,7 +216,8 @@ autocompleteFactura(codigo);
 
 function obtenerResultadoFactura(row){
 //var codigo = row.split("|")[0];
-var codigo = row[0];
+codigo = row[0];
+alert("codigo "+codigo);
 //alert(codigo);
 //rellenarCamposProveedor(codigo);
 
@@ -299,8 +301,8 @@ var fecha = $("input[id*=tbFecha]").val();
 var total_credito = $("input[id*=tbTotal]").val();
 var motivo =$("#ctl00_ContentPlaceHolder1_tbMotivo").val(); 
 var id_factura =_idFactura;
-alert("entro");
 
+//"'id_proveedor':'"+ codigo + "'}",
  $.ajax({
         type: "POST",
         dataType: "json",
@@ -312,7 +314,8 @@ alert("entro");
              "'fecha':'"+ fecha +"', " + 
              "'total_credito':'"+ total_credito +"', " + 
              "'motivo':'"+ motivo +"', " + 
-             "'id_factura':'"+ id_factura + "'}",
+             "'id_factura':'"+ id_factura +"', " + 
+             "'id_proveedor':'"+codigo+"'}",
         success: function(data) {
             // Decodifica la cadena obtenida y lo transforma en un objeto producto
            // var proveedor = JSON.decode(dato);
@@ -430,6 +433,12 @@ function AnularNotaCredito(boton){
 _idProveedor=$(boton).attr("id");
 borrar(_idProveedor);
 popupEliminarNotaCredito();
+return false;
+}
+
+function atrasNotaCredito(){
+alert("redirecciona");
+window.location.href="~/CtaCteCompras/NotaCredito.aspx";
 return false;
 }
 
