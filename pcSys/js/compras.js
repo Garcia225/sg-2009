@@ -7,6 +7,7 @@ var _idBanco = 0;
 var _movIdCtaCte = 0;
 var tablaFactura;
 var _idFactura=0;
+var _idTargeta=0;
 
 $(document).ready(function() {
 //btEditar
@@ -339,7 +340,7 @@ function autocompleteBancos() {
 
 /*Funcion que habilita el automplete del campo tarjeta*/
 function autocompleteTarjeta() {
-    $("span[id*=lbValor]").text("Targeta de Credito");
+    $("span[id*=lbValor]").text("Nº de Targeta");
        $.ajax({
             type:"POST",       
             dataType: "json", 
@@ -368,6 +369,7 @@ function autocompleteTarjeta() {
                     }
                     }).result(function(e, i, row) {
 	                	//obtenerResultadoProveedor(row);
+	                	_idTargeta = row.split("|")[0];
                     });
                
             },
