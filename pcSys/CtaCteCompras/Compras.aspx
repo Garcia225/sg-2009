@@ -373,6 +373,16 @@ function cancela(){
                                                         <asp:SqlDataSource ID="dsFormaPago" runat="server" ConnectionString="<%$ ConnectionStrings:Personal %>"
                                                             SelectCommand="SELECT [id_forma_pago], [cant_dias] FROM [PCCC_FORMA_DE_PAGO]"></asp:SqlDataSource>
                                                     </td>
+                                                    <td align="right">
+                                                        <asp:Label ID="lbInteres" runat="server" Text="Interes del"></asp:Label>
+                                                    </td>
+                                                    <td align="left">
+                                                        <asp:DropDownList ID="chInteres" runat="server" DataSourceID="dsInteres" DataTextField="porcentaje" DataValueField="id_interes">
+                                                        </asp:DropDownList><asp:SqlDataSource ID="dsInteres" runat="server" ConnectionString="<%$ ConnectionStrings:Personal %>"
+                                                            SelectCommand="SELECT [id_interes], [porcentaje] FROM [PCCC_INTERES]"></asp:SqlDataSource>
+                                                        <asp:Label ID="porcent" Text="%" runat="server"></asp:Label>
+                                                 
+                                                    </td>
                                                 </tr>
                                             </table>
                                         </div>

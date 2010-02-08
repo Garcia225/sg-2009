@@ -258,6 +258,7 @@ $.ajax({
             alert("Se ha producido un error en la llamada ajax al metodo:" + urlGetDataSet);
         }
     });  //fin de llamada ajax
+    
     return false;
 
 }
@@ -354,7 +355,7 @@ function listarCuotas(idFactura, fila) {
             alert("Se ha producido un error en la llamada ajax al metodo:" + urlGetDataSet);
         }
     }); //fin de llamada ajax
-
+    //alert("Tabla hecha");
     return false;
 }
 
@@ -379,6 +380,7 @@ function showDetail(idFactura) {
  
         $("img[id*=" + idFactura + "]").attr('src', '../images/minus.png');
         listarCuotas(idFactura, fila);
+        
         _movCtaCte = getMovCtaCte(idFactura);
         
     } else {
@@ -388,7 +390,8 @@ function showDetail(idFactura) {
         nRemove.parentNode.removeChild(nRemove);
         //alert("Oculta el detalle");
     }
-    //alert("Show detail");
+   
+    //controlarInteres(idFactura);
     return false;
 }
 
@@ -442,6 +445,7 @@ function prepararCuota(idFactura){
     //recorrer tabla detalle de factura seleccionada
     $('#detalle' + idFactura + ' tbody tr').each(function() {
         //Guarda la fila selecciona
+        //alert("Entro");
         var fila = $('td', this);
         //obtener datos de la fila actual
         var datos = oTableCuota.fnGetData(i);
@@ -454,6 +458,7 @@ function prepararCuota(idFactura){
         var filaArray = new Array();
         
         if ($("input[id=" + idCuota + "]").is(':checked')) {
+        //alert("esta chequeado");
         //Obtengo el importe que se desea pagar
         importes = document.getElementById(monto).value; 
         //Convierto el importe a int
@@ -462,14 +467,10 @@ function prepararCuota(idFactura){
         idCuota = datos[0];
         //Obtengo el total de la cuota
         importeTotal = datos[3];
-        //Pregunto si el campo imorte esta vacio
-        if(importes == ""){
-        //si lo esta se paga la cuota en su totalidad
-            pagarCuotas(idCuota, importeTotal, _movCtaCte);
-        }else{//else 4 ver 
+        //alert("importeTotal---> "+importeTotal);
         
-        //Pregunta si el importe total de la cuota es cero
-        if(importeTotal == 0){
+        
+         if(importeTotal == 0){
             //de ser asi lanza un mensaje avisando que la cuota ya fue pagado en su totalidad
               $(function() {
 	    $("div[id*=cuotaPagada]").dialog({
@@ -495,7 +496,45 @@ function prepararCuota(idFactura){
 	    });
     });
             
-        }else{//else 3
+        }else{
+        
+        
+        
+        //Pregunto si el campo imorte esta vacio
+        if(importes == ""){
+        //alert("importes ==");
+        //si lo esta se paga la cuota en su totalidad
+            pagarCuotas(idCuota, importeTotal, _movCtaCte);
+        }else{//else 4 ver 
+        //alert("importeTotal---->"+importeTotal);
+        //Pregunta si el importe total de la cuota es cero
+        /*if(importeTotal == 0){
+            //de ser asi lanza un mensaje avisando que la cuota ya fue pagado en su totalidad
+              $(function() {
+	    $("div[id*=cuotaPagada]").dialog({
+		    bgiframe: true,
+		    resizable: false,
+		    modal: true,
+		    hide: true,
+		    width: 380,
+		    overlay: {
+			    backgroundColor: '#000',
+			    opacity: 0.5
+		    },
+	        close: function() {
+			    $(this).dialog('destroy');
+		    },
+		    buttons: {
+		    'Aceptar': function(){
+		        //$("input[id*="+_idFactura+"]").val('disabled');
+		        $(this).dialog('destroy');
+		        
+		    }
+		    }
+	    });
+    });
+            
+        }else{*///else 3
       
       //Pregunta si lo ingresado es letra
        if (isNaN(importe)){
@@ -568,7 +607,7 @@ function prepararCuota(idFactura){
     });
     
     recargarCuotas(idFactura);
-    alert(_idProveedor);
+    //alert(_idProveedor);
     getCtaCte(_idProveedor);
     //rellenarCamposProveedor(_idProveedor);
     return false;
@@ -665,3 +704,62 @@ function getCtaCte(idProveedor)
 
     return false;
 }
+
+//DETALLESSSSSSSSSS
+
+function controlarInteres(idFactura){
+    var arreglo = new Array();
+    var fila = new Array();
+    var cont = 0;
+   //"[[\"29\",200000,\"Pago total de la cuota Nº 1/2 de la factura 321\"],[\"30\",200000,\"Pago total de la cuota Nº 2/2 de la factura 321\"]]"
+    //recorrer datatable detalle
+    
+    /*$('#detalle' + idFactura + ' tbody tr').each(function() {
+        //Guarda la fila selecciona
+        var fila = $('td', this);
+        //obtener datos de la fila actual
+        var datos = oTableCuota.fnGetData(i);
+        i++;
+        // 0  es la posicion del checkbox en la tabla dinamica
+        var idCuota = ($(datos[7]).attr('id'));
+        // campo editable es 0
+        var monto = ($(datos[6]).attr('id'));
+        //crear arreglo bidimensional que será enviado como el detalle
+        var filaArray = new Array();
+        
+        if ($("input[id=" + idCuota + "]").is(':checked')) {*/
+    
+    
+    
+    
+    alert("idFactura "+idFactura);
+    var res = '[';
+    $('#detalle' + idFactura + ' tbody tr').each(function() {
+    alert("entro");
+     var nTds = $('td', this);
+    //var fila = $('td', this);
+        //obtener datos de la fila actual
+    //var datos = oTableCuota.fnGetData(i);
+        
+        
+        if(cont != 0){
+            res += ",";
+        }
+        var idCuota = $(nTds[0]).text();
+        //var idCuota = ($(datos[7]).attr('id'));
+        //var idCuota = ($(fila[7]).attr('id'));
+        alert("idCuota  "+idCuota );
+        res += '[\"'+idCuota+'\\"]';
+        
+        
+        var fila = new Array();
+        fila.push(idCuota);
+        arreglo.push(fila);
+        cont++;
+    });
+    res += ']';
+    
+    alert("res "+res);
+        return res;    
+        // "[[\"29\",200000,\"Pago total de la cuota Nº 1/2 de la factura 321\"],[\"30\",200000,\"Pago total de la cuota Nº 2/2 de la factura 321\"]]"
+ }
