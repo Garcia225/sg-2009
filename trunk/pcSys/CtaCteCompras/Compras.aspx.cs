@@ -343,7 +343,7 @@ public partial class Compras : System.Web.UI.Page
     public static string GuardarFactura(string id_factura, string proveedor, string num_factura, string fecha, 
         string total_factura, string condicion_pago, string empleado, string detalle_factura, string num_cheque,
         string id_banco, string opcion,string numCuota,string cantCuotas,string importe,string saldo,
-        string fechaVencimiento,string idFormaPago,string sumaResta,string idMovCtaCtePro)
+        string fechaVencimiento,string idFormaPago,string sumaResta,string idMovCtaCtePro,string interes)
     {
         Factura fac = new Factura();
        
@@ -364,7 +364,7 @@ public partial class Compras : System.Web.UI.Page
             //obtener de alguna forma el mov cta cte pro
             for (i = 0; i < (Convert.ToInt32(cantCuotas)); i++ ) {
                 int importeCuota = ((Convert.ToInt32(importe)) / (Convert.ToInt32(cantCuotas)));
-                Cuotas cuota = new Cuotas("1", (i + 1).ToString(), cantCuotas, importeCuota.ToString(), importeCuota.ToString(), fechaVencimiento, idFormaPago, estado, idMov);
+                Cuotas cuota = new Cuotas("1", (i + 1).ToString(), cantCuotas, importeCuota.ToString(), importeCuota.ToString(), fechaVencimiento, idFormaPago, estado, idMov, interes);
                 cuota.Guardar();
             }
         return "EXITO";

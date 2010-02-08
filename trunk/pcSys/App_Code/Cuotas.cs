@@ -20,7 +20,8 @@ public class Cuotas
                     string _fecha_vecimiento,
                     string _id_forma_pago,
                     string _idEstado,
-                    string _id_mov_cta_cte_pro)
+                    string _id_mov_cta_cte_pro,
+                    string _interes)
 	{
         try { 
         idCuota = Convert.ToInt32(_id_cuotas);
@@ -32,6 +33,7 @@ public class Cuotas
         idFormaDePago = Convert.ToInt32(_id_forma_pago);
         idMovCtaCtePro = Convert.ToInt32(_id_mov_cta_cte_pro);
         idEstado = Convert.ToInt32(_idEstado);
+        interes = Convert.ToInt32(_interes);
 
     }catch(Exception error){
 
@@ -129,6 +131,13 @@ public class Cuotas
         get { return idMovCtaCtePro; }
     }
 
+    private int interes;
+    public int Interes
+    {
+        set { interes = value; }
+        get { return interes; }
+    }
+
     #endregion
 
     /// <summary>
@@ -155,6 +164,7 @@ public class Cuotas
             procCuotas.Parameters.Add(new SqlParameter("@cant_cuotas", CantCuota));
             procCuotas.Parameters.Add(new SqlParameter("@importe", Importe));
             procCuotas.Parameters.Add(new SqlParameter("@saldo", Saldo));
+            procCuotas.Parameters.Add(new SqlParameter("@interes", Interes));
             procCuotas.Parameters.Add(new SqlParameter("@fecha_vencimiento", FechaVencimiento));
             procCuotas.Parameters.Add(new SqlParameter("@id_forma_pago", IdFormaDePago));
             procCuotas.Parameters.Add(new SqlParameter("@id_estado", IdEstado));

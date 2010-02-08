@@ -481,7 +481,7 @@ function guardarFactura() {
         
     var id_factura = '1';
     var proveedor = _idProveedor;//$("select[id*=chProveedor]").val();
-    alert("PROVEEDORRRRR "+_idProveedor);
+    //alert("PROVEEDORRRRR "+_idProveedor);
     //return false;
     var fecha = $("input[id*=tbFecha]").val();
     var total_factura = $("input[id*=tbTotal]").val();
@@ -513,7 +513,7 @@ function guardarFactura() {
         //tbCantCuotas
     //return false;
     }else{
-        alert("Contado");
+        //alert("Contado");
         opcion = "Contado"; 
         sumaResta = "S"; 
         cant_cuotas = "0";
@@ -540,7 +540,8 @@ function guardarFactura() {
     var fechaVencimiento = "01/01/2009"; 
     var idFormaPago = $("select[id*=chFormaPago]").val();//
     var idMovCtaCtePro = _movIdCtaCte;
-    alert(idMovCtaCtePro);
+    var interes = $("select[id*=chInteres]").val();
+    //alert(idMovCtaCtePro);
     //return false;
           var parametros = "{" +
              "'id_factura':'"+ id_factura + "', "+ 
@@ -561,7 +562,8 @@ function guardarFactura() {
              "'fechaVencimiento':'"+ fechaVencimiento +"', " +
              "'idFormaPago':'"+ idFormaPago +"', " + 
              "'sumaResta':'"+ sumaResta +"', " + 
-             "'idMovCtaCtePro':'"+idMovCtaCtePro+"'}"; 
+             "'idMovCtaCtePro':'"+ idMovCtaCtePro +"', " + 
+             "'interes':'"+interes+"'}"; 
              
     /*string detalle_factura, string num_cheque,
         string id_banco, string opcion*/
