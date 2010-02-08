@@ -36,17 +36,20 @@
                     <asp:TextBox ID="tbProveedor" runat="server" Width="350px"></asp:TextBox><font
                                                 color="red">*</font>
                 </td>
-                <td align="right">
+                
+                
+            </tr>
+            <tr>
+            <td align="right">
                     <asp:Label ID="lbDoc" runat="server" Font-Bold="True" Text="Documento"></asp:Label>
                 </td>
-                <td align="left">
-                    <asp:TextBox ID="tbDoc" runat="server"></asp:TextBox>
-                </td>
-                <td align="right">
-                    <asp:Label ID="lbDireccion" runat="server" Font-Bold="True" Text="Direccion"></asp:Label>
-                </td>
-                <td align="left">
-                    <asp:TextBox ID="tbDireccion" runat="server"></asp:TextBox>
+                <td colspan="6" align="left">
+                    <asp:TextBox ID="tbDoc" Width="70px" runat="server"></asp:TextBox>
+                    &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;<%--</td>
+                <td align="right">--%><asp:Label ID="lbDireccion" runat="server" Font-Bold="True" Text="Direccion"></asp:Label>
+                <%--</td>
+                <td align="left">--%>
+                    <asp:TextBox ID="tbDireccion" Width="350px" runat="server"></asp:TextBox>
                 </td>
             </tr>
             <tr>
@@ -55,11 +58,11 @@
                 </td>
                 <td align="left">
                     <asp:TextBox ID="tbDebe" runat="server"></asp:TextBox>
-                </td>
-                <td align="right">
+                <%--</td>
+                <td align="right">--%>
                     <asp:Label ID="lbHaber" runat="server" Font-Bold="True" Text="Haber"></asp:Label>
-                </td>
-                <td align="left">
+                <%--</td>
+                <td align="left">--%>
                     <asp:TextBox ID="tbHaber" runat="server"></asp:TextBox>
                 </td>
                 <td align="right">

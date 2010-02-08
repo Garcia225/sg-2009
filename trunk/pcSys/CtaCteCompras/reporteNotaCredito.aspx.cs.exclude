@@ -85,7 +85,7 @@ public partial class CtaCteCompras_Reporte_Nota_Credito : System.Web.UI.Page
 
             sqlCommand.Parameters.AddWithValue("@opcion", opcion);
             sqlCommand.Parameters.AddWithValue("@filtro", filter);
-
+            //sp_reporte_nota_credito
             sqlCommand.ExecuteNonQuery();
             // Creo el documento del reporte
             ReportDocument reportDocument = new ReportDocument();

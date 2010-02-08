@@ -375,7 +375,7 @@ public partial class Compras : System.Web.UI.Page
             string estado = fac.getEstado("PENDIENTE");
             // Pide los datos a la clase Cliente y lo devuelve
             Factura factura = new Factura(id_factura, proveedor, num_factura, fecha, total_factura, condicion_pago, empleado, detalle_factura, cantCuotas, sumaResta, estado);
-            factura.Guardar();
+            //factura.Guardar();
 
             Cheques cheque = new Cheques(total_factura, num_cheque, fecha, id_banco);
             //factura.Guardar();

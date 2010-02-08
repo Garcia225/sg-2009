@@ -25,8 +25,7 @@ public class NotaCredito
                     string _fecha,
                     string total_credito,
                     string _motivo,
-                    string id_factura,
-                    string id_proveedor )
+                    string id_factura)
 	{
         idNotaCredito= Convert.ToInt32(id_notacredito);
         numNotaCredito = Convert.ToInt32(num_notacredito);
@@ -34,7 +33,6 @@ public class NotaCredito
         totalCredito = float.Parse(total_credito);
         motivo = _motivo;
         idFactura = Convert.ToInt32(id_factura);
-        idProveedor = Convert.ToInt32(id_proveedor);
 	}
      public NotaCredito() { }
     #region propiedades nota de credito
@@ -104,17 +102,6 @@ public class NotaCredito
         get { return idFactura; }
     }
 
-   
-      /// <summary>
-    /// Id del proveedor
-    /// </summary>
-    private int idProveedor;
-    public int IdProveedor
-    {
-        set { idProveedor = value; }
-        get { return idProveedor; }
-    }
-
     #endregion
 
 
@@ -127,7 +114,6 @@ public class NotaCredito
     {
         Conexion _conexion = null;
         int cont = 0;
-        string mensaje = "";
         try
         {
 
@@ -139,7 +125,7 @@ public class NotaCredito
             int opcion = 1;
 
             //procedimiento cabecera
-            SqlCommand proc = new SqlCommand("sp_abm_notaCredito", _conexion.getSqlConnection());
+            SqlCommand proc = new SqlCommand("sp_abm_nota_credito", _conexion.getSqlConnection());
             proc.CommandType = CommandType.StoredProcedure;
             
 
@@ -152,24 +138,8 @@ public class NotaCredito
             proc.Parameters.Add(new SqlParameter("@total", TotalCredito));//120000.0
             proc.Parameters.Add(new SqlParameter("@motivo", Motivo));//1
             proc.Parameters.Add(new SqlParameter("@id_factura", IdFactura));//1
-            proc.Parameters.Add(new SqlParameter("@id_proveedor", IdProveedor));//1
-
-            SqlParameter parOutput = new SqlParameter("@mensaje", SqlDbType.Int);
-            parOutput.Direction = ParameterDirection.Output;
-
-            //especifico tipo de parametro
-            proc.Parameters.Add(parOutput);
-
-            //Ejecuto la consulta
+            // No se encontró el procedimiento almacenado 'sp_abm_nota_credito'
             proc.ExecuteNonQuery();
-
-            mensaje = proc.Parameters["@mensaje"].Value.ToString();
-
-            if (mensaje.Equals("1"))
-            {
-                return "El numero ya existe";
-            }
-            
             return "OK";
 
         }
@@ -210,6 +180,13 @@ public class NotaCredito
 
             //crear sentencia sql
             StringBuilder sentencia = new StringBuilder();
+           /* SELECT     PCCC_NOTA_CREDITO.num_nota_credito, PCCC_NOTA_CREDITO.fecha, PCCC_NOTA_CREDITO.total, PCCC_NOTA_CREDITO.motivo, 
+                      PCCC_FACTURA.num_factura, PCCC_NOTA_CREDITO.id_nota_credito
+FROM         PCCC_NOTA_CREDITO INNER JOIN
+                      PCCC_FACTURA ON PCCC_NOTA_CREDITO.id_factura = PCCC_FACTURA.id_factura
+WHERE     (PCCC_NOTA_CREDITO.borrado = 'N')*/
+
+            //char n = 'N';
 
             sentencia.Append(" SELECT PCCC_NOTA_CREDITO.num_nota_credito, ");
             sentencia.Append(" PCCC_NOTA_CREDITO.fecha, ");
@@ -266,7 +243,7 @@ public class NotaCredito
             int opcion = 3;
 
             //procedimiento cabecera
-            SqlCommand proc = new SqlCommand("sp_abm_notaCredito", _conexion.getSqlConnection());
+            SqlCommand proc = new SqlCommand("sp_abm_nota_credito", _conexion.getSqlConnection());
             proc.CommandType = CommandType.StoredProcedure;
 
 
@@ -279,7 +256,7 @@ public class NotaCredito
             proc.Parameters.Add(new SqlParameter("@total", TotalCredito));//120000.0
             proc.Parameters.Add(new SqlParameter("@motivo", "jj"));//1
             proc.Parameters.Add(new SqlParameter("@id_factura", IdFactura));//1
-            proc.Parameters.Add(new SqlParameter("@id_proveedor", "prov"));//1
+
             proc.ExecuteNonQuery();
             return "OK";
 
