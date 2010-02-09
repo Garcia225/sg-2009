@@ -34,7 +34,7 @@ namespace SeguridadEnAspNet
 			int idPerfil=0;
 			try
 			{
-				System.Data.DataSet ds = _dataWorker.ExecuteDataset( connSql, "Usuarios_TxUsuarioClave", new object[] {usuario, clave});
+                System.Data.DataSet ds = _dataWorker.ExecuteDataset(connSql, "sp_login_usuarios_x_usuario", new object[] { '3', 1000, usuario, clave });
 				if( ds.Tables[0].Rows.Count > 0 )
 					idPerfil = Convert.ToInt32(ds.Tables[0].Rows[0]["idPerfil"]);
 
@@ -58,7 +58,7 @@ namespace SeguridadEnAspNet
 			int idPerfil=0;
 			try
 			{
-				System.Data.DataSet ds = _dataWorker.ExecuteDataset( connSql, "Usuarios_TxUsuario", new object[] {usuario});
+				System.Data.DataSet ds = _dataWorker.ExecuteDataset( connSql, "sp_login_usuarios_x_usuario", new object[] {'2', 1000, usuario});
 				if( ds.Tables[0].Rows.Count > 0 )
 					idPerfil = Convert.ToInt32(ds.Tables[0].Rows[0]["idPerfil"]);
 
@@ -83,9 +83,9 @@ namespace SeguridadEnAspNet
 			string Perfil="";
 			try
 			{
-				System.Data.DataSet ds = _dataWorker.ExecuteDataset( connSql, "Usuarios_TxUsuarioClave", new object[] {usuario, clave});				
+                System.Data.DataSet ds = _dataWorker.ExecuteDataset(connSql, "sp_login_usuarios_x_usuario", new object[] {'3',1000, usuario, clave });				
 				if( ds.Tables[0].Rows.Count > 0 )
-					Perfil = Convert.ToString(ds.Tables[0].Rows[0]["Descripcion"]);
+                    Perfil = Convert.ToString(ds.Tables[0].Rows[0]["descripcion"]);
 
 			}
 			catch( Exception ex )
@@ -106,9 +106,9 @@ namespace SeguridadEnAspNet
 			string Perfil="";
 			try
 			{
-				System.Data.DataSet ds = _dataWorker.ExecuteDataset( connSql, "Usuarios_TxUsuario", new object[] {usuario});
+                System.Data.DataSet ds = _dataWorker.ExecuteDataset(connSql, "sp_login_usuarios_x_usuario", new object[] {'2', 1000, usuario });
 				if( ds.Tables[0].Rows.Count > 0 )
-					Perfil = Convert.ToString(ds.Tables[0].Rows[0]["Descripcion"]);
+                    Perfil = Convert.ToString(ds.Tables[0].Rows[0]["descripcion"]);
 
 			}
 			catch( Exception ex )
