@@ -32,7 +32,7 @@ namespace SeguridadEnAspNet
 			System.Data.DataSet ds = new System.Data.DataSet();
 			try
 			{
-				ds = _dataWorker.ExecuteDataset(ConfigurationSettings.AppSettings["SqlServerConnectionString"], "PerfilesPaginas_TxIdPerfil", new object[] {idPerfil});
+                ds = _dataWorker.ExecuteDataset(ConfigurationSettings.AppSettings["SqlServerConnectionString"], "sp_login_perfilespagina_x_perfiles", new object[] {'1',idPerfil,"" });
 			}
 			catch( Exception ex )
 			{
@@ -52,7 +52,7 @@ namespace SeguridadEnAspNet
 			System.Data.DataSet ds = new System.Data.DataSet();
 			try
 			{
-				ds = _dataWorker.ExecuteDataset( ConfigurationSettings.AppSettings["SqlServerConnectionString"], "PerfilesPaginas_TxPerfiles", new object[] {Perfil});
+                ds = _dataWorker.ExecuteDataset(ConfigurationSettings.AppSettings["SqlServerConnectionString"], "sp_login_perfilespagina_x_perfiles", new object[] { '2',0,Perfil });
 			}
 			catch( Exception ex )
 			{
