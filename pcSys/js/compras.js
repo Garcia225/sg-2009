@@ -8,6 +8,7 @@ var _movIdCtaCte = 0;
 var tablaFactura;
 var _idFactura=0;
 var _idTargeta=0;
+var _totalItemViejo=0;
 
 $(document).ready(function() {
 //btEditar
@@ -104,26 +105,32 @@ $("#divCuotas").slideUp();
         }    
       });
       
+      
+      //////////////////////////////////////////////////////////////////////////////
       //Evento click
           $("#tablaDetalle tbody").click(function(event) {
         $(oTablaDetalle.fnSettings().aoData).each(function() {
             $(this.nTr).removeClass('row_selected');
         });
+        
         $(event.target.parentNode).addClass('row_selected');
         var tds = $(event.target.parentNode).children('td'); 
         var cantidad  = $(tds[0]).text(); 
+        var idComponente = $(tds[1]).text(); 
+        var _totalItemViejo = $(tds[4]).text(); 
+        
+        //aqui obtengo el costo del componente anterior
+        //me quede aca
         
         $("input[id*=btEditar]").css("display", "inline");
         $("input[id*=btEliminar]").css("display", "inline");
         $("input[id*=btAgregar]").css("display", "none");
         $("input[id*=btCancelar]").css("display", "none");
         
-        
-       $("select[id*=chComponente]").removeAttr('disabled');
-       $("input[id*=tbCant]").removeAttr('disabled');
-       $("select[id*=chComponente]").attr('disabled', 'disabled'); 
-       $("input[id*=tbCant]").attr('disabled', 'disabled');
-
+        $("select[id*=chComponente]").removeAttr('disabled');
+        $("input[id*=tbCant]").removeAttr('disabled');
+        $("select[id*=chComponente]").attr('disabled', 'disabled'); 
+        $("input[id*=tbCant]").attr('disabled', 'disabled');
         
         //alert("Entro");
         //parseInt(cantidad)
@@ -132,12 +139,18 @@ $("#divCuotas").slideUp();
         if (!($("input[id*=tbCant]").is(":enabled"))) {
                 $("input[id*=tbCant]").val(cantidad);
         }
+        alert("_totalItemViejo "+_totalItemViejo);
     }); 
+    //////////////////////////////////////////////////////////////////////////////
+    
     autocompleteProveedor();
     crearTablaDetalle();
     fechaActual();
     deshabilitarCampos();
+    alert("_totalItemViejo "+_totalItemViejo);
 });
+
+//function asignar()´ç
 
 function editarDetalle(){
     $("select[id*=chComponente]").removeAttr('disabled');
@@ -168,17 +181,72 @@ function anularFactura(boton){
 
 function guardarDetalle(){
         //4ft5vhcf
-        var anSelected = fnGetSelected( oTablaDetalle );
-        var nFila = oTablaDetalle.fnGetPosition( anSelected[0]);
+        alert("Hi world...!!!");
+        alert("_totalItemViejo "+_totalItemViejo );
+        /*var anSelected = fnGetSelected( oTablaDetalle );
+        var nFila = oTablaDetalle.fnGetPosition( anSelected[0]);*/
         //oTablaDetalle.fnDeleteRow(iRow);
-        
+        alert("...bye bye...");
         var idComp =  $("select[id*=chComponente]").val();
         var cant = $("input[id*=tbCant]").val();
+        //_totalItemViejo
+        //SE AGREGO SE AGREGO SE AGREGO SE AGREGO
+        $.ajax({
+        type: "POST",
+        dataType: "json",
+        contentType: "application/json; charset=utf-8",
+        url: "Compras.aspx/getCostoComponente",  //invocar al metodo del servidor que devulve un datatable
+        data: "{'idComponente':'" + idComp + "'}",
+        success: function(obtener_return_val) {
+            // Decodifica la cadena obtenida y lo transforma en un objeto producto
+            var costoComp = JSON.decode(obtener_return_val);
+            costo = costoComp.costo;
+            
+            //var componente = nombreMatPrima(idComp);
+            //alert(componente);
+            //var componente = $("select[id*=chComponente]").text();
+            var cantidad = parseInt($("input[id*=tbCant]").val());
+            var totalViejo = parseInt(_totalItemViejo);
+            var total = costo*cantidad;
+            totalFactura = totalFactura + total;
+            componente = costoComp.descripcion;
+            //$("input[id*=tbTotal]").val(totalFactura);
+            alert("totalFactura-> "+totalFactura);
+            alert("totalViejo-> "+_totalItemViejo);
+            $("input[id*=tbTotal]").val(totalFactura-totalViejo);
+        //_totalItemViejo
+        //Agrego en la tabla detalle
+       /*oTablaDetalle.fnAddData( [
+            cantidad + "",
+            idComp + "",
+            componente + "",
+            costo + "",
+            total+"",
+            costo + "",
+            costo + ""]);*/
+            var anSelected = fnGetSelected( oTablaDetalle );
+            var nFila = oTablaDetalle.fnGetPosition( anSelected[0]);
+            oTablaDetalle.fnUpdate(idComp, nFila, 1);
+            oTablaDetalle.fnUpdate(cant, nFila, 0);
+            oTablaDetalle.fnUpdate(costo, nFila, 3);
+            oTablaDetalle.fnUpdate(total, nFila, 4);
+            oTablaDetalle.fnUpdate(componente, nFila, 2);
+            alert("nFila "+nFila[1]);
+            //Aca agregue
+            //oTablaDetalle.fnDeleteRow(nFila);
+            //tbTotal
+            var serial = cargarArreglo();
+            return false;
+
+        },//tira un error en caso de haya un problema con el servidor
+        error: function(msg) {
+            alert("Se ha producido un Error");
+        }
+    });  //fin ajax
+        //SE AGREGO SE AGREGO SE AGREGO SE AGREGO
         
-        //alert("hgfghjk "+idComp);
-        
-        oTablaDetalle.fnUpdate(idComp, nFila, 0);
-        oTablaDetalle.fnUpdate(cant, nFila, 2);
+        /*oTablaDetalle.fnUpdate(idComp, nFila, 1);
+        oTablaDetalle.fnUpdate(cant, nFila, 0);*/
         return false;
 }
 
@@ -191,13 +259,29 @@ function crearTablaDetalle() {
         "aaData": eval(aaData),
         "bFilter":false,
 		"bPaginate":false,
-        "aoColumns": [
+        "aoColumns": [//Aqui modifique
             //{ "sTitle": "Item" },
             { "sTitle": "Cantidad" }, 
 		    { "sTitle": "Codigo" },          //crear titulos de las columnas
 		    { "sTitle": "Componente" },
 		    { "sTitle": "Costo Unit." },
 		    { "sTitle": "Total" },
+		    //MMOODDIIFFIICCAADDOO
+		    { "sTitle": "Borrar", "bSortable": false,
+                    "fnRender": function(obj) {
+                        //var idFacturaDet = obj.aData[obj.iDataColumn];
+                        var idComponente = obj.aData[1];
+                        var sReturn = '<center><A href="#"><IMG id="'+idComponente+'"  onclick="borrarDetalle(); return false;" src="../images/delete.ico" style="width: 16px; height: 16px; border-left-color: yellow; border-bottom-color: yellow; border-top-style: none; border-top-color: yellow; border-right-style: none; border-left-style: none; border-right-color: yellow; border-bottom-style: none;"  ></a></center>';
+                        return sReturn;
+                        }
+                    },
+                    { "sTitle": "Editar", "bSortable": false,
+                    "fnRender": function(obj) {
+                        var idComponente = obj.aData[1];//modificarPersona(boton)
+                        var sReturn = '<center><A href="#"><IMG id="'+idComponente+'"  onclick="modificarItem(this); return false;" src="../images/edit.png" style="width: 16px; height: 16px; border-left-color: yellow; border-bottom-color: yellow; border-top-style: none; border-top-color: yellow; border-right-style: none; border-left-style: none; border-right-color: yellow; border-bottom-style: none;"  ></a></center>';
+                        return sReturn;
+                        }
+                    }
 		    ],
         "oLanguage": {                    //setear variables por defecto al idioma español
             "sProcessing": "Procesando...",
@@ -208,6 +292,187 @@ function crearTablaDetalle() {
     });
     return false;
 }
+
+function borrarItem(boton){
+    _idComponente = $(boton).attr("id");
+    //borrar();
+    //Falta implementar
+    //popupEliminarPersona();
+    //return false;
+}
+
+function modificarItem(boton){
+    _idComponente = $(boton).attr("id");
+    //borrar();
+    //Falta implementar
+    //popupEliminarPersona();
+    //return false;
+}
+/*funcion que controla que no se repitan productos
+retorna 0 si no hubo coincidencia y 1 si hay*/
+function controlarComponenteRepetido(idComponente) {
+    var idComponenteActual;
+    var contenido;
+    var result = 0;
+
+    $('#tablaDetalle tbody tr').each(function() {
+        var nTds = $('td', this);
+
+        contenido = $(nTds[0]).text();
+        
+//var anSelected = fnGetSelected( oTablaDetalle );
+//var nFila = oTablaDetalle.fnGetPosition( anSelected[0]);
+//oTablaDetalle.fnDeleteRow(nFila);
+
+        //tabla vacia
+        if (contenido != "No se cargaron detalles") {
+
+            idComponenteActual = $(nTds[1]).text();
+
+            //id 1 indica la celda seleccionada
+            //if ((idComponente == idComponenteActual) && ($(nTds[0]).attr('id') == '0')) {
+                if ((idComponente == idComponenteActual)) {
+                //agregue borrar
+                //oTablaDetalle.fnDeleteRow(nTds);
+                //oTablaDetalle.fnDeleteRow(nFila);
+                popupDetalleRepetido();
+                result = 1;
+                return result;
+            }
+
+        }
+    });
+
+    return result;
+}
+
+function popupDetalleRepetido() {
+    $(function() {
+	    $("div[id*=detalleRepetido]").dialog({
+		    bgiframe: true,
+		    resizable: false,
+		    modal: true,
+		    hide: true,
+		    width: 380,
+		    overlay: {
+			    backgroundColor: '#000',
+			    opacity: 0.5
+		    },
+	        close: function() {
+			    $(this).dialog('destroy');
+		    },
+		    buttons: {
+		    'Aceptar': function(){
+		        //borrar();
+		        $(this).dialog('destroy');
+		        
+		    },
+		    'Cancelar': function(){
+		        $(this).dialog('destroy');
+		        
+		    }
+		    }
+	    });
+    });
+    return false;
+}
+
+/* eliminar detalle*/
+function borrarDetalle() {
+    var anSelected = fnGetSelected( oTablaDetalle );
+    var nFila = oTablaDetalle.fnGetPosition( anSelected[0]);
+    $(function() {
+    $("div[id*=borrarDetalle]").dialog({
+            bgiframe: true,
+            resizable: false,
+            modal: true,
+            hide: true,
+            overlay: {
+                backgroundColor: '#000',
+                opacity: 0.5
+            },
+            buttons: {
+                Cancel: function() {
+                    $(this).dialog('destroy');
+                },
+                'Borrar': function() {
+                    oTablaDetalle.fnDeleteRow(nFila);
+                    
+                    $("select[id*=chComponente]").removeAttr('disabled');
+                    $("input[id*=tbCant]").removeAttr('disabled');
+                    $("input[id*=btGuardar]").css("display", "none");
+                    $("input[id*=btEliminar]").css("display", "none");
+                    $("input[id*=btCancelar]").css("display", "none");
+                    $("input[id*=btEditar]").css("display", "none");
+                    $("input[id*=btAgregar]").css("display", "inline");
+                    
+                    // Destruye el diálogo
+                    $(this).dialog('destroy');
+                
+                }
+            }
+        });
+    });
+    return false;
+} 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 /*Funcion que habilita el automplete del campo proveedor*/
@@ -425,11 +690,15 @@ function rellenarCamposProveedor(idProveedor) {
 
 /*funcion que agrega una nueva fila a la tabla detalle*/
 function fnAddRow() {
+var idComp =  $("select[id*=chComponente]").val();
+var comprobar = controlarComponenteRepetido(idComp);
+if(comprobar == 0){
+
   if ($("input[id*=tbCant]").val() == "" || $("input[id*=tbCant]").val() == 0) {
         $("input[id*=tbCant]").val('');
         $("input[id*=tbCant]").focus();
     }else {
-        var idComp =  $("select[id*=chComponente]").val();
+        //var idComp =  $("select[id*=chComponente]").val();
         var componente;
         var costo;
         $.ajax({
@@ -451,14 +720,16 @@ function fnAddRow() {
             totalFactura = totalFactura + total;
             componente = costoComp.descripcion;
             $("input[id*=tbTotal]").val(totalFactura);
-
+            //_totalItemViejo 
         //Agrego en la tabla detalle
        oTablaDetalle.fnAddData( [
             cantidad + "",
             idComp + "",
             componente + "",
             costo + "",
-            total+""]);
+            total+"",
+            costo + "",
+            costo + ""]);
             var serial = cargarArreglo();
             return false;
 
@@ -469,6 +740,11 @@ function fnAddRow() {
     });  //fin ajax
     }
     
+    
+    
+    }else{
+        return false;    
+    }
     return false;
 }
 
@@ -520,20 +796,6 @@ function guardarFactura() {
         sumaResta = "S"; 
         cant_cuotas = "0";
     }
-    //alert("num_cheque "+num_cheque+" _idBanco "+_idBanco+" opcion "+opcion);
-    //return false;
-    /*id_factura,  
-    proveedor,  
-    num_factura,  
-    fecha, 
-    total_factura,  
-    condicion_pago,  
-    empleado,  
-    detalle_factura,  
-    num_cheque,
-    id_banco,  
-    opcion, */
-    //alert("Suma o Resta "+sumaResta);
     var numCuota = 0;
     //var cantCuotas = $("input[id*=tbCantCuotas]").val();//
     var cantCuotas = cant_cuotas;
@@ -585,6 +847,8 @@ function guardarFactura() {
                         }
                     });//fin ajax
                     }
+                    deshabilitarCampos();
+                    vaciarCampos();
                     return false;
 }
 
@@ -842,6 +1106,74 @@ function deshabilitarBotones(){
     $("input[id*=imgbtCancel]").css("display", "inline");
     return false;
 }
+function vaciarCampos(){
+    $("input[id*=tbCod]").val('');
+    $("input[id*=tbNum]").val('');
+    $("input[id*=tbFecha]").val('');
+    $("input[id*=tbDoc]").val('');
+    $("input[id*=tbDireccion]").val('');
+    $("input[id*=tbCant]").val('');
+    $("input[id*=tbTotal]").val('');   
+    $("input[id*=tbProveedor]").val('');
+    $("input[id*=tbValor]").val('');
+    $("input[id*=tbNroCheque]").val('');
+    $("input[id*=tbBanco]").val('');
+}
 
+/* obtener la fila actual seleccionada */
+function fnGetSelected( oTableLocal )
+{
+	var aReturn = new Array();
+	var aTrs = oTableLocal.fnGetNodes();
+        	
+	for ( var i=0 ; i<aTrs.length ; i++ )
+	{
+		if ( $(aTrs[i]).hasClass('row_selected') )
+		{
+			aReturn.push( aTrs[i] );
+		}
+	}
+	
+	return aReturn;
+}
 
+//Falta terminar
+function fnGetSelectede( oTableLocal )
+{
+	var aReturn = new Array();
+	var aTrs = oTableLocal.fnGetNodes();
+	
+	
+  $('#tablaDetalle tbody tr').each(function() {
+        var nTds = $('td', this);
+        contenido = $(nTds[0]).text();
+        if (contenido == "123") {
+        alert("es 123");
+            var p = $('tr', this);
+            var q = $(p[0]).text();
+            alert("tr "+q)
+            idComponenteActual = $(nTds[1]).text();
+            $(this.p).addClass('row_selected');
+        //$(event.target.parentNode).addClass('row_selected');
+            }
 
+        
+    });
+    
+    
+        	
+        	
+        	
+	for ( var i=0 ; i<aTrs.length ; i++ )
+	{
+		if ( $(aTrs[i]).hasClass('row_selected') )
+		{
+			aReturn.push( aTrs[i] );
+			alert("se selecciono una fila");
+		}
+	}
+	
+	var s = $(aTrs[0]).text();
+	alert("no se selecciono nada "+s);
+	return aReturn;
+}

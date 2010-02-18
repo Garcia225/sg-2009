@@ -408,3 +408,8 @@ function editar(){
     $("input[id*=imgbtdMod]").css("display", "inline");
     return false;
 }
+
+function Imprimir() {
+        window.location.href="reporteProveedores.aspx"; 
+        return false;
+    };
