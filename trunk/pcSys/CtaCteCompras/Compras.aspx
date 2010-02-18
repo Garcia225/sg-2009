@@ -322,7 +322,7 @@ function cancela(){
                                                                     runat="server" Width="68px" />
                                                             </td>
                                                             <td>
-                                                                <asp:Button ID="btEliminar" Text="Eiminar" runat="server" Width="68px" />
+                                                                <asp:Button ID="btEliminar" Text="Eiminar" OnClientClick="borrarDetalle(); return false;" runat="server" Width="68px" />
                                                             </td>
                                                             <td>
                                                                 <asp:Button ID="btCancelar" Text="Cancelar" OnClientClick="cancelarDetalle(); return false;"
@@ -529,6 +529,20 @@ function cancela(){
             <div id="anularFactura" title="Anular Factura">
                 <!-- Mensaje de Confirmacion -->
                 Esta seguro que desea anular la factura seleccionado?
+            </div>
+        </div>
+        <!-- Detalle Repetido -->
+        <div style="display: none;">
+            <div id="detalleRepetido" title="Detalle Repetido">
+                <!-- Mensaje de Confirmacion -->
+                El Componente que desea agregar ya existe en el detalle
+            </div>
+        </div>
+        <!-- Borrar Detalle -->
+        <div style="display: none;">
+            <div id="borrarDetalle" title="Borrar Detalle">
+                <!-- Mensaje de Confirmacion -->
+                Esta seguro de que desea borrar el item seleccionado ?
             </div>
         </div>
     </div>

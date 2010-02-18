@@ -116,4 +116,8 @@ public partial class Personas : System.Web.UI.Page
         Proveedores proveedor = new Proveedores(idProveedor, razon_social, nombre, apellido, num_doc,  dir, telefono,tipo_doc);
         return proveedor.Modificar();
     }
+    protected void imgbtListar_Click(object sender, ImageClickEventArgs e)
+    {
+        Response.Redirect("reporteProveedores.aspx");
+    }
 }

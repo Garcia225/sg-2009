@@ -54,6 +54,7 @@
     $("input[id*=imgbtCancel]").css("display", "inline");
     
     
+    $("input[id*=tbApellido]").alpha();
     $("input[id*=tbTelefono]").numeric({allow:"()-"});
     $("input[id*=tbNumDoc]").numeric({allow:"-"});
     $("input[id*=tbFechaNac]").mask("99/99/9999");
@@ -261,6 +262,9 @@ function cancela() {
                                     </td>
                                     <td>
                                         <asp:ImageButton ID="imgbtGuardar" ToolTip="Guardar" runat="server" ImageUrl="../images/save.png" />
+                                    </td>
+                                    <td>
+                                        <asp:ImageButton ID="imgbtListar" ToolTip="Guardar" runat="server" ImageUrl="~/images/list.ico" OnClientClick="Imprimir(); return false" />
                                     </td>
                                     <td>
                                         <asp:ImageButton ID="imgbtdMod" ToolTip="Modificar" runat="server" ImageUrl="../images/save.png" />
