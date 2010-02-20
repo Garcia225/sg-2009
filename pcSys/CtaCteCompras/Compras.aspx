@@ -545,5 +545,12 @@ function cancela(){
                 Esta seguro de que desea borrar el item seleccionado ?
             </div>
         </div>
+        <!-- Falta Cuotas -->
+        <div style="display: none;">
+            <div id="faltaCuotas" title="Ingresar Cuotas">
+                <!-- Mensaje de Confirmacion -->
+                No ingreso la cantidad de Cuotas
+            </div>
+        </div>
     </div>
 </asp:Content>
