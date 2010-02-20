@@ -139,7 +139,6 @@ $("#divCuotas").slideUp();
         if (!($("input[id*=tbCant]").is(":enabled"))) {
                 $("input[id*=tbCant]").val(cantidad);
         }
-        alert("_totalItemViejo "+_totalItemViejo);
     }); 
     //////////////////////////////////////////////////////////////////////////////
     
@@ -147,7 +146,6 @@ $("#divCuotas").slideUp();
     crearTablaDetalle();
     fechaActual();
     deshabilitarCampos();
-    alert("_totalItemViejo "+_totalItemViejo);
 });
 
 //function asignar()´ç
@@ -181,13 +179,14 @@ function anularFactura(boton){
 
 function guardarDetalle(){
         //4ft5vhcf
-        alert("Hi world...!!!");
-        alert("_totalItemViejo "+_totalItemViejo );
         /*var anSelected = fnGetSelected( oTablaDetalle );
         var nFila = oTablaDetalle.fnGetPosition( anSelected[0]);*/
         //oTablaDetalle.fnDeleteRow(iRow);
-        alert("...bye bye...");
         var idComp =  $("select[id*=chComponente]").val();
+        
+        var comprobar = controlarComponenteRepetidoEditar(idComp);
+        //Si es 0 aun no se ha agregado ese componente
+if(comprobar == 0){
         var cant = $("input[id*=tbCant]").val();
         //_totalItemViejo
         //SE AGREGO SE AGREGO SE AGREGO SE AGREGO
@@ -211,8 +210,6 @@ function guardarDetalle(){
             totalFactura = totalFactura + total;
             componente = costoComp.descripcion;
             //$("input[id*=tbTotal]").val(totalFactura);
-            alert("totalFactura-> "+totalFactura);
-            alert("totalViejo-> "+_totalItemViejo);
             $("input[id*=tbTotal]").val(totalFactura-totalViejo);
         //_totalItemViejo
         //Agrego en la tabla detalle
@@ -231,7 +228,6 @@ function guardarDetalle(){
             oTablaDetalle.fnUpdate(costo, nFila, 3);
             oTablaDetalle.fnUpdate(total, nFila, 4);
             oTablaDetalle.fnUpdate(componente, nFila, 2);
-            alert("nFila "+nFila[1]);
             //Aca agregue
             //oTablaDetalle.fnDeleteRow(nFila);
             //tbTotal
@@ -247,7 +243,52 @@ function guardarDetalle(){
         
         /*oTablaDetalle.fnUpdate(idComp, nFila, 1);
         oTablaDetalle.fnUpdate(cant, nFila, 0);*/
+        $("input[id*=btEditar]").css("display", "none");
+        $("input[id*=btEliminar]").css("display", "none");
+        $("input[id*=btGuardar]").css("display", "none");
+        $("input[id*=btCancelar]").css("display", "none");
+        $("input[id*=btAgregar]").css("display", "inline");        
         return false;
+        }else{
+        return false;
+        }
+}
+
+
+function controlarComponenteRepetidoEditar(idComponente) {
+    var idComponenteActual;
+    var contenido;
+    var result = 0;
+
+    $('#tablaDetalle tbody tr').each(function() {
+        var nTds = $('td', this);
+
+        contenido = $(nTds[0]).text();
+        
+//var anSelected = fnGetSelected( oTablaDetalle );
+//var nFila = oTablaDetalle.fnGetPosition( anSelected[0]);
+//oTablaDetalle.fnDeleteRow(nFila);
+
+        //tabla vacia
+        if (contenido != "No se cargaron detalles") {
+
+            idComponenteActual = $(nTds[1]).text();
+
+            //id 1 indica la celda seleccionada
+            //if ((idComponente == idComponenteActual) && ($(nTds[0]).attr('id') == '0')) {
+                if ((idComponente == idComponenteActual)) {
+                //agregue borrar
+                //oTablaDetalle.fnDeleteRow(nTds);
+                //oTablaDetalle.fnDeleteRow(nFila);
+                popupDetalleRepetido();
+                result = 1;
+                return result;
+            }
+
+        }
+    });
+
+    return result;
 }
 
 /* crear tabla dinamica para el detalle */
@@ -415,65 +456,6 @@ function borrarDetalle() {
     });
     return false;
 } 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 /*Funcion que habilita el automplete del campo proveedor*/
 function autocompleteProveedor() {
@@ -692,6 +674,8 @@ function rellenarCamposProveedor(idProveedor) {
 function fnAddRow() {
 var idComp =  $("select[id*=chComponente]").val();
 var comprobar = controlarComponenteRepetido(idComp);
+
+//Si es 0 aun no se ha agregado ese componente
 if(comprobar == 0){
 
   if ($("input[id*=tbCant]").val() == "" || $("input[id*=tbCant]").val() == 0) {
@@ -780,12 +764,13 @@ function guardarFactura() {
     
     
     if ($("input[id*=cbCredito]").is(":checked")) {
-        alert("Credito");
         opcion = "Credito";
         cant_cuotas = $("input[id*=tbCantCuotas]").val();
         sumaResta = "R";
         if(cant_cuotas == ""){
-            alert("Ingrese la cantidad de Cuotas");
+        //PopUp faltaCuotas
+            
+            popupFaltaCuotas();
             return false;
         }
         //tbCantCuotas
@@ -948,6 +933,32 @@ function popupanularFactura() {
 		        
 		    },
 		    'Cancelar': function(){
+		        $(this).dialog('destroy');
+		        
+		    }
+		    }
+	    });
+    });
+    return false;
+}
+
+function popupFaltaCuotas() {
+    $(function() {
+	    $("div[id*=faltaCuotas]").dialog({
+		    bgiframe: true,
+		    resizable: false,
+		    modal: true,
+		    hide: true,
+		    width: 380,
+		    overlay: {
+			    backgroundColor: '#000',
+			    opacity: 0.5
+		    },
+	        close: function() {
+			    $(this).dialog('destroy');
+		    },
+		    buttons: {
+		    'Aceptar': function(){
 		        $(this).dialog('destroy');
 		        
 		    }
@@ -1148,10 +1159,8 @@ function fnGetSelectede( oTableLocal )
         var nTds = $('td', this);
         contenido = $(nTds[0]).text();
         if (contenido == "123") {
-        alert("es 123");
             var p = $('tr', this);
             var q = $(p[0]).text();
-            alert("tr "+q)
             idComponenteActual = $(nTds[1]).text();
             $(this.p).addClass('row_selected');
         //$(event.target.parentNode).addClass('row_selected');
