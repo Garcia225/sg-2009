@@ -279,7 +279,12 @@ public class NotaCredito
             proc.Parameters.Add(new SqlParameter("@total", TotalCredito));//120000.0
             proc.Parameters.Add(new SqlParameter("@motivo", "jj"));//1
             proc.Parameters.Add(new SqlParameter("@id_factura", IdFactura));//1
-            proc.Parameters.Add(new SqlParameter("@id_proveedor", "prov"));//1
+            proc.Parameters.Add(new SqlParameter("@id_proveedor", "23"));//1
+            SqlParameter parOutput = new SqlParameter("@mensaje", SqlDbType.Int);
+            parOutput.Direction = ParameterDirection.Output;
+
+            //especifico tipo de parametro
+            proc.Parameters.Add(parOutput);
             proc.ExecuteNonQuery();
             return "OK";
 
