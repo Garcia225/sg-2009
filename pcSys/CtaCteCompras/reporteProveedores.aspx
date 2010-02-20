@@ -14,12 +14,9 @@ que elija el usuario, su fuente de datos es cliente.xsd que el cual usa un proce
 almacenado para hacer sus consultas-->
 <div style="display: block;" id="content_2" class="content">
     <!-- Titulo de la pagina -->
-    <center>
-        <div id="divTitulo" class="titulo">
-            <strong><span style="font-size: 14pt">
-            Listado de Proveedores </span></strong>
-        </div>
-        </center>
+    <div id="divTitulo" class="titulo">
+        Listado de Proveedores
+    </div>
     <br />
     <br />
     <!-- Tabla que contiene la Barra de busqueda -->
@@ -54,7 +51,7 @@ almacenado para hacer sus consultas-->
         <td colspan="4" align="center">
                 <!-- Boton buscar, utilizado para actualizar el reporte -->
                 <asp:ImageButton ID="btnListar" runat="server" ToolTip="Listar" ImageUrl ="~/images/list.ico" OnClick="btnListarClick"/>
-                <asp:ImageButton ID="imgbtnCancelar" runat="server" ToolTip="Salir" ImageUrl ="~/images/atras.ico" OnClick="imgbtnCancelar_Click" />
+                <asp:ImageButton ID="imgbtnCancelar" runat="server" ToolTip="Salir" ImageUrl ="~/images/cancel.png"  OnClick="imgbtnCancelar_Click" />
             </td>
         </tr>
     </table>

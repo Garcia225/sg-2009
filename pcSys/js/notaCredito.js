@@ -315,7 +315,7 @@ var id_factura =_idFactura;
              "'total_credito':'"+ total_credito +"', " + 
              "'motivo':'"+ motivo +"', " + 
              "'id_factura':'"+ id_factura +"', " + 
-             "'id_proveedor':'"+codigo+"'}",
+             "'id_proveedor':'"+_idProveedor+"'}",
         success: function(data) {
             // Decodifica la cadena obtenida y lo transforma en un objeto producto
            // var proveedor = JSON.decode(dato);
@@ -409,7 +409,9 @@ function borrar(idNota)
              "'fecha':'"+ _fecha +"', " + 
              "'total_credito':'0', " + 
              "'motivo':' ', " + 
-             "'id_factura':'9'}" , 
+             "'id_factura':'9', " + 
+             "'id_proveedor':'0'}" , 
+             
              success: function(data){
                 if(data == 'OK'){
                     recargar(); 
@@ -460,7 +462,7 @@ function popupEliminarNotaCredito() {
             },
             buttons: {
             'Eliminar': function(){
-                borrar();
+                borrar(_idProveedor);
                 $(this).dialog('destroy');
                
             },
