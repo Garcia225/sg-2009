@@ -112,4 +112,9 @@ public partial class CtaCteCompras_ReporteFacturas : System.Web.UI.Page
     {
         mostrarInforme();
     }
+
+    protected void imgbtnCancelar_Click(object sender, ImageClickEventArgs e)
+    {
+        Response.Redirect("~/CtaCteCompras/ReportesPcSys.aspx");
+    }
 }
