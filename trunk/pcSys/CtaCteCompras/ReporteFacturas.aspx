@@ -101,7 +101,7 @@
                 <td colspan="4" align="center">
                     <!-- Boton buscar, utilizado para actualizar el reporte -->
                     <asp:ImageButton ID="btnListar" runat="server" ToolTip="Listar" ImageUrl="~/images/list.ico" OnClick="btnListar_Click" />
-                    <asp:ImageButton ID="imgbtnCancelar" runat="server" ToolTip="Salir" ImageUrl="~/images/cancel.png" />
+                    <asp:ImageButton ID="imgbtnCancelar" runat="server" ToolTip="Salir" ImageUrl ="~/images/cancel.png"  OnClick="imgbtnCancelar_Click" />
                 </td>
             </tr>
         </table>

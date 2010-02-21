@@ -14,9 +14,12 @@ que elija el usuario, su fuente de datos es cliente.xsd que el cual usa un proce
 almacenado para hacer sus consultas-->
 <div style="display: block;" id="content_2" class="content">
     <!-- Titulo de la pagina -->
-    <div id="divTitulo" class="titulo">
-        Listado de Proveedores
-    </div>
+        <center>
+        <div id="divTitulo" class="titulo">
+            <strong><span style="font-size: 14pt">
+            Listado de Proveedores </span></strong>
+        </div>
+        </center>
     <br />
     <br />
     <!-- Tabla que contiene la Barra de busqueda -->

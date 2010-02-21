@@ -168,6 +168,6 @@ public partial class CtaCteCompras_Reporte_Proveedores : System.Web.UI.Page
     /// <param name="e"></param>
    protected void imgbtnCancelar_Click(object sender, ImageClickEventArgs e)
     {
-        Response.Redirect("~/CtaCteCompras/Proveedor.aspx");
+        Response.Redirect("~/CtaCteCompras/ReportesPcSys.aspx");
     }
 }

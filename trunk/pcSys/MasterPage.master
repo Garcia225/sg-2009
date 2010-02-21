@@ -41,8 +41,8 @@
                         Pagos</a></li>
                     <li><a id="tab4" href="NotaCredito.aspx" title="content_4" class="tab" onclick="irTab4(); return false;">
                         Nota Credito</a></li>
-                   <li><a id="tab5" href="reporteNotaCredito.aspx" title="content_5" class="tab" onclick="irTab5(); return false;">
-                        Nota Credito</a></li>
+                   <li><a id="tab5" href="ReportesPcSys.aspx" title="content_5" class="tab" onclick="irTab5(); return false;">
+                        Reportes</a></li>
                 </ul>
                 <asp:ContentPlaceHolder ID="ContentPlaceHolder1" runat="server">
                 </asp:ContentPlaceHolder>
