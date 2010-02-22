@@ -13,12 +13,10 @@ public class Cheques
 {
 	public Cheques( string _importe,
                     string _num_cheque,
-                    string _fecha,
                     string _id_banco)
 	{
         importe = float.Parse(_importe);
         num_cheque = Convert.ToInt32(_num_cheque);
-        fecha = Convert.ToDateTime(_fecha);
         id_banco = Convert.ToInt32(_id_banco);
 	}
 
@@ -42,16 +40,6 @@ public class Cheques
     {
         set { num_cheque = value; }
         get { return num_cheque; }
-    }
-
-    /// <summary>
-    /// Cantidad de Cuotas
-    /// </summary>
-    private DateTime fecha;
-    public DateTime Fecha
-    {
-        set { fecha = value; }
-        get { return fecha; }
     }
 
     /// <summary>
@@ -90,7 +78,6 @@ public class Cheques
             procCheques.Parameters.Add(new SqlParameter("@id_cheque", Id_banco));
             procCheques.Parameters.Add(new SqlParameter("@importe", Importe));
             procCheques.Parameters.Add(new SqlParameter("@num_cheque", Num_cheque));
-            procCheques.Parameters.Add(new SqlParameter("@fecha", Fecha));
             procCheques.Parameters.Add(new SqlParameter("@id_banco", Id_banco));
             //Ejecuto la consulta
             procCheques.ExecuteNonQuery();
