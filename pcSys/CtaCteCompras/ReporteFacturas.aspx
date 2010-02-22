@@ -36,37 +36,35 @@
     <div style="display: block;" id="content_2" class="content">
         <!-- Titulo de la pagina -->
         <center>
-        <div id="divTitulo" class="titulo">
-            <strong><span style="font-size: 14pt">
-            Listado de Facturas </span></strong>
-        </div>
+            <div id="divTitulo" class="titulo">
+                <strong><span style="font-size: 14pt">Listado de Facturas </span></strong>
+            </div>
         </center>
         <br />
         <br />
         <!-- Tabla que contiene la Barra de busqueda -->
         <table id="tblOpciones" class="botonera" align="center">
-        <tr>
-        <td>
-        <asp:Label id="chFiltrado" Text="Filtrar por:" runat="server"></asp:Label>
-        </td>
-        <td>
-        <asp:DropDownList ID="chOpcion" runat="server">
-        <asp:ListItem Value="1" Text="Todos"></asp:ListItem>
-        <asp:ListItem Value="2" Text="Por proveedor"></asp:ListItem>
-        </asp:DropDownList>
-        </td>
-        </tr>
+            <tr>
+                <td>
+                    <asp:Label ID="chFiltrado" Text="Filtrar por:" runat="server"></asp:Label>
+                </td>
+                <td>
+                    <asp:DropDownList ID="chOpcion" runat="server">
+                        <asp:ListItem Value="1" Text="Todos"></asp:ListItem>
+                        <asp:ListItem Value="2" Text="Por proveedor"></asp:ListItem>
+                    </asp:DropDownList>
+                </td>
+            </tr>
             <tr>
                 <td>
                     <asp:Label ID="lbProveedor" Text="Proveedor" runat="server"></asp:Label>
                 </td>
                 <td>
-                <asp:DropDownList ID="chProveedores" runat="server" DataSourceID="dsProveedores" DataTextField="Nombre" DataValueField="id_proveedor">
-                
-                </asp:DropDownList><asp:SqlDataSource ID="dsProveedores" runat="server" ConnectionString="<%$ ConnectionStrings:Personal %>"
-                    SelectCommand="SELECT     id_proveedor, razon_social + ' -  ' + apellido AS Nombre&#13;&#10;FROM         PCCC_PROVEEDORES&#13;&#10;WHERE     (borrado = 'N')">
-                
-                </asp:SqlDataSource>
+                    <asp:DropDownList ID="chProveedores" runat="server" DataSourceID="dsProveedores"
+                        DataTextField="Nombre" DataValueField="id_proveedor">
+                    </asp:DropDownList><asp:SqlDataSource ID="dsProveedores" runat="server" ConnectionString="<%$ ConnectionStrings:Personal %>"
+                        SelectCommand="SELECT     id_proveedor, razon_social + ' -  ' + apellido AS Nombre&#13;&#10;FROM         PCCC_PROVEEDORES&#13;&#10;WHERE     (borrado = 'N')">
+                    </asp:SqlDataSource>
                 </td>
                 <%--<td>
                     <asp:TextBox ID="tbProveedor" runat="server" Width="500px"></asp:TextBox>
@@ -100,7 +98,8 @@
             <tr>
                 <td colspan="4" align="center">
                     <!-- Boton buscar, utilizado para actualizar el reporte -->
-                    <asp:ImageButton ID="btnListar" runat="server" ToolTip="Listar" ImageUrl="~/images/list.ico" OnClick="btnListar_Click" />
+                    <asp:ImageButton ID="btnListar" runat="server" ToolTip="Listar" ImageUrl="~/images/list.ico"
+                        OnClick="btnListar_Click" />
                     <asp:ImageButton ID="imgbtnCancelar" runat="server" ToolTip="Salir" ImageUrl ="~/images/cancel.png"  OnClick="imgbtnCancelar_Click" />
                 </td>
             </tr>
