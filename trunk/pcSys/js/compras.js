@@ -1,4 +1,5 @@
 ﻿var oTablaDetalle;
+var oTablaFormaPago;
 var item = 0;
 var totalFactura = 0;
 var _idProveedor = 0;
@@ -9,10 +10,15 @@ var tablaFactura;
 var _idFactura=0;
 var _idTargeta=0;
 var _totalItemViejo=0;
+var _idTipoTargeta=0;
+var _nombreBanco = "";
+var _tipoTargeta = "";
+var _saldo = 0;
+var _totalFactura = 0;
 
 $(document).ready(function() {
 //btEditar
-
+$("input[id*=imgbtNuevo]").focus();
 $("input[id*=tbNum]").numeric();
 $("input[id*=tbCant]").numeric();
 $("input[id*=btEditar]").css("display", "none");
@@ -20,6 +26,8 @@ $("input[id*=btEliminar]").css("display", "none");
 $("input[id*=btGuardar]").css("display", "none");
 $("input[id*=btCancelar]").css("display", "none");
 
+$("input[id*=tbTipoValor]").css("display", "none");
+autocompleteTipoValor();
 
 
 	$.ajax({
@@ -125,7 +133,7 @@ $("#divCuotas").slideUp();
         $("input[id*=btEditar]").css("display", "inline");
         $("input[id*=btEliminar]").css("display", "inline");
         $("input[id*=btAgregar]").css("display", "none");
-        $("input[id*=btCancelar]").css("display", "none");
+        $("input[id*=btCancelar]").css("display", "inline");
         
         $("select[id*=chComponente]").removeAttr('disabled');
         $("input[id*=tbCant]").removeAttr('disabled');
@@ -141,9 +149,12 @@ $("#divCuotas").slideUp();
         }
     }); 
     //////////////////////////////////////////////////////////////////////////////
+   
+    
     
     autocompleteProveedor();
     crearTablaDetalle();
+    crearTablaFormasPago();
     fechaActual();
     deshabilitarCampos();
 });
@@ -151,7 +162,7 @@ $("#divCuotas").slideUp();
 //function asignar()´ç
 
 function editarDetalle(){
-    $("select[id*=chComponente]").removeAttr('disabled');
+    //$("select[id*=chComponente]").removeAttr('disabled');
     $("input[id*=tbCant]").removeAttr('disabled');
     $("input[id*=btGuardar]").css("display", "inline");
     $("input[id*=btEliminar]").css("display", "none");
@@ -167,6 +178,7 @@ function cancelarDetalle(){
     $("input[id*=btGuardar]").css("display", "none");
     $("input[id*=btEditar]").css("display", "none");
     $("input[id*=btCancelar]").css("display", "none");
+    $("input[id*=btEliminar]").css("display", "none");
     return false;
 }
 //Llama al popUp que pregunta si se desea borrar
@@ -177,6 +189,7 @@ function anularFactura(boton){
     //return false;
 }
 
+//Guardo el detalle editado
 function guardarDetalle(){
         //4ft5vhcf
         /*var anSelected = fnGetSelected( oTablaDetalle );
@@ -184,9 +197,9 @@ function guardarDetalle(){
         //oTablaDetalle.fnDeleteRow(iRow);
         var idComp =  $("select[id*=chComponente]").val();
         
-        var comprobar = controlarComponenteRepetidoEditar(idComp);
+        //var comprobar = controlarComponenteRepetidoEditar(idComp);
         //Si es 0 aun no se ha agregado ese componente
-if(comprobar == 0){
+//if(comprobar == 0){
         var cant = $("input[id*=tbCant]").val();
         //_totalItemViejo
         //SE AGREGO SE AGREGO SE AGREGO SE AGREGO
@@ -243,15 +256,17 @@ if(comprobar == 0){
         
         /*oTablaDetalle.fnUpdate(idComp, nFila, 1);
         oTablaDetalle.fnUpdate(cant, nFila, 0);*/
+        $("select[id*=chComponente]").removeAttr('disabled');
         $("input[id*=btEditar]").css("display", "none");
         $("input[id*=btEliminar]").css("display", "none");
         $("input[id*=btGuardar]").css("display", "none");
         $("input[id*=btCancelar]").css("display", "none");
-        $("input[id*=btAgregar]").css("display", "inline");        
+        $("input[id*=btAgregar]").css("display", "inline"); 
+        $("input[id*=imgbtGuardar]").css("display", "inline");       
         return false;
-        }else{
-        return false;
-        }
+        //}else{
+       // return false;
+       // }
 }
 
 
@@ -334,6 +349,35 @@ function crearTablaDetalle() {
     return false;
 }
 
+
+/* crear tabla dinamica para el detalle */
+function crearTablaFormasPago() {
+    var aaData = "[]";
+
+    //genera tabla dinamica vacia
+    oTablaFormaPago = $("table[id*=tablaFormaPagos]").dataTable({
+        "aaData": eval(aaData),
+        "bFilter":false,
+		"bPaginate":false,
+        "aoColumns": [//Aqui modifique
+            //{ "sTitle": "Item" },
+            { "sTitle": "Valor" }, 
+		    { "sTitle": "Cod. Banco" },          //crear titulos de las columnas
+		    { "sTitle": "Banco" },
+		    { "sTitle": "Numero" },
+		    { "sTitle": "Monto" },
+		    { "sTitle": "Tipo" }
+		    ],
+        "oLanguage": {                    //setear variables por defecto al idioma español
+            "sProcessing": "Procesando...",
+            "sZeroRecords": "No se cargaron detalles",
+            "sInfo": "(_START_-_END_) de _TOTAL_ detalles"
+        }
+
+    });
+    return false;
+}
+
 function borrarItem(boton){
     _idComponente = $(boton).attr("id");
     //borrar();
@@ -404,7 +448,65 @@ function popupDetalleRepetido() {
 		    },
 		    buttons: {
 		    'Aceptar': function(){
+		        $(this).dialog('destroy');
+		        
+		    }
+		    }
+	    });
+    });
+    return false;
+}
+
+//faltaDetalle
+function popupFaltaDetalle() {
+    $(function() {
+	    $("div[id*=faltaDetalle]").dialog({
+		    bgiframe: true,
+		    resizable: false,
+		    modal: true,
+		    hide: true,
+		    width: 350,
+		    overlay: {
+			    backgroundColor: '#000',
+			    opacity: 0.5
+		    },
+	        close: function() {
+			    $(this).dialog('destroy');
+		    },
+		    buttons: {
+		    'Aceptar': function(){
+		        $(this).dialog('destroy');
+		        
+		    }
+		    }
+	    });
+    });
+    return false;
+}
+
+/*se inderta la forma de pago de la factura*/
+function popupFormaPago() {
+$("input[id*=tbNroCheque]").focus();
+    $(function() {
+	    $("div[id*=divFormaPago]").dialog({
+		    bgiframe: true,
+		    resizable: false,
+		    modal: true,
+		    hide: true,
+		    width: 800,
+		    overlay: {
+			    backgroundColor: '#000',
+			    opacity: 0.5
+		    },
+	        close: function() {
+			    $(this).dialog('destroy');
+		    },
+		    buttons: {
+		    'Aceptar': function(){
 		        //borrar();
+		        //cargarArregloFormasPago()
+		        
+		        guardarFacturas();
 		        $(this).dialog('destroy');
 		        
 		    },
@@ -417,6 +519,7 @@ function popupDetalleRepetido() {
     });
     return false;
 }
+
 
 /* eliminar detalle*/
 function borrarDetalle() {
@@ -446,7 +549,7 @@ function borrarDetalle() {
                     $("input[id*=btCancelar]").css("display", "none");
                     $("input[id*=btEditar]").css("display", "none");
                     $("input[id*=btAgregar]").css("display", "inline");
-                    
+                    $("input[id*=imgbtGuardar]").css("display", "inline");
                     // Destruye el diálogo
                     $(this).dialog('destroy');
                 
@@ -561,6 +664,8 @@ function autocompleteBancos() {
                     }).result(function(e, i, row) {
 	                	//obtenerResultadoProveedor(row);
 	                	_idBanco = row.split("|")[0];
+	                	_nombreBanco = row.split("|")[1];
+	                	$("input[id*=tbMonto]").removeAttr('disabled'); 
                     });
                
             },
@@ -585,6 +690,11 @@ function autocompleteBancos() {
     return false;
 }
 
+function hola(){
+    var c = $("select[id*=chTipoValor]").val();
+    alert(c);
+}
+
 /*Funcion que habilita el automplete del campo tarjeta*/
 function autocompleteTarjeta() {
     $("span[id*=lbValor]").text("Nº de Targeta");
@@ -593,7 +703,8 @@ function autocompleteTarjeta() {
             dataType: "json", 
             contentType: "application/json; charset=utf-8",
             url: "Compras.aspx/GetTargetas", 
-            data:"{}", 
+            data:"{" +
+            "'idTipoTar':'" + _idTipoTargeta + "'}", 
             success: function(data){
                   //asginar objeto proveeedores obtenido del servidor
                  //al plugin autcomplete 
@@ -605,10 +716,10 @@ function autocompleteTarjeta() {
                     mustMatch: false,
                     autoFill: false,
                     formatItem: function(row, i, max) {
-                        return row[0];
+                        return row[0] +" - "+row[1]+" - "+row[2];
                     },
                     formatMatch: function(row, i, max) {
-                        return row[0] +"|";
+                        return row[0] +"|"+row[1]+"|"+row[2];
                     },
                     formatResult: function(row) {
                         _idProveedor = row[0];
@@ -617,6 +728,12 @@ function autocompleteTarjeta() {
                     }).result(function(e, i, row) {
 	                	//obtenerResultadoProveedor(row);
 	                	_idTargeta = row.split("|")[0];
+	                	_idBanco = row.split("|")[1];
+	                	_nombreBanco = row.split("|")[2];
+	                	alert("_nombreBanco "+_nombreBanco);
+	                	//alert("_idBanco "+_idBanco);
+	                	$("input[id*=tbMonto]").removeAttr('disabled'); 
+                        //$("input[id*=tbMonto]").attr('disabled', 'disabled');
                     });
                
             },
@@ -640,6 +757,64 @@ function autocompleteTarjeta() {
         
     return false;
 }
+
+
+function autocompleteTipoValor() {
+    //$("span[id*=lbValor]").text("Nº de Targeta");
+       $.ajax({
+            type:"POST",       
+            dataType: "json", 
+            contentType: "application/json; charset=utf-8",
+            url: "Compras.aspx/GetTipoTargetas", 
+            data:"{}", 
+            success: function(data){
+                  //asginar objeto proveeedores obtenido del servidor
+                 //al plugin autcomplete 
+                 $("input[id*=tbTipoValor]").autocomplete(eval(data), {
+                    minChars: 0,
+                    width: 310,
+                    max:5,
+                    matchContains: true,
+                    mustMatch: false,
+                    autoFill: false,
+                    formatItem: function(row, i, max) {
+                        return row[0] +" - "+row[1];
+                    },
+                    formatMatch: function(row, i, max) {
+                        return row[0] +"|"+row[1];
+                    },
+                    formatResult: function(row) {
+                        return row[1];
+                    }
+                    }).result(function(e, i, row) {
+	                	_idTipoTargeta = row.split("|")[0];
+	                	_tipoTargeta = row.split("|")[1];
+	                	autocompleteTarjeta();
+                    });
+               
+            },
+             //lanzar mensaje de error en caso que la llamada ajax tenga problemas
+            error: function(msg){ 
+                alert("Se ha producido un Error");
+            }    
+        });// fin .ajax proveedor
+        //reactivar evento
+        var inputTbProveedor = $("input[id*=tbTipoValor]");
+
+         $("input[id*=tbTipoValor]").blur(function() {
+             inputTbProveedor.search(
+                function(result) {
+                    // if no value found, clear the input box
+                    if (typeof (result) == 'undefined') {
+                        inputTbProveedor.val("");
+                    }
+                });
+            });
+        
+    return false;
+}
+
+
 
 //Rellena los campos con los datos del proveedor seleccionado
 function rellenarCamposProveedor(idProveedor) {
@@ -682,7 +857,6 @@ if(comprobar == 0){
         $("input[id*=tbCant]").val('');
         $("input[id*=tbCant]").focus();
     }else {
-        //var idComp =  $("select[id*=chComponente]").val();
         var componente;
         var costo;
         $.ajax({
@@ -695,16 +869,11 @@ if(comprobar == 0){
             // Decodifica la cadena obtenida y lo transforma en un objeto producto
             var costoComp = JSON.decode(obtener_return_val);
             costo = costoComp.costo;
-            
-            //var componente = nombreMatPrima(idComp);
-            //alert(componente);
-            //var componente = $("select[id*=chComponente]").text();
             var cantidad = parseInt($("input[id*=tbCant]").val());
             var total = costo*cantidad;
             totalFactura = totalFactura + total;
             componente = costoComp.descripcion;
             $("input[id*=tbTotal]").val(totalFactura);
-            //_totalItemViejo 
         //Agrego en la tabla detalle
        oTablaDetalle.fnAddData( [
             cantidad + "",
@@ -732,19 +901,75 @@ if(comprobar == 0){
     return false;
 }
 
-//Rellena los campos con los datos del proveedor seleccionado
-function guardarFactura() {
-    var condicion_pago = 1;
-    /*if($("#lbCredito").attr("class") == "CheckBoxLabelClass LabelSelected"){
-        var condicion_pago = 2;
-        alert("Credito");
-    }*/
+//grega una nueva forma de pago
+function addFormaPago() {//acaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+    var valor="";
+    var numero=0;
+    var monto = $("input[id*=tbMonto]").val();
+    var tipoTar = " ";
+if ($("input[id*=cbTargeta]").is(":checked")) {
+        valor = "TARGETA";
+        numero = $("input[id*=tbValor]").val();
+        tipoTar = _tipoTargeta;
+}else{
+        valor = "CHEQUE";
+        numero = $("input[id*=tbNroCheque]").val();
+}
+            oTablaFormaPago.fnAddData( [
+            valor + "",
+            _idBanco + "",
+            _nombreBanco+ "",
+            numero + "",
+            monto+"",
+            tipoTar + ""]);
+            
+            
+            return false;
+}
+
+function guardarFactura(){//acaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+    _totalFactura = 0;
+    _saldo = 0;
+   oTablaFormaPago.fnClearTable(oTablaFormaPago);
+   var total_fact = $("input[id*=tbTotal]").val();     
+   $("input[id*=tbMonto]").val(total_fact);     
+    _totalFactura = total_fact;
+    _saldo = total_fact;
+    var serial = cargarArreglo();
+    if(serial[3] == 'N'){
+        popupFaltaDetalle();
+    }else{
+    
+    ////////
+         if ($("input[id*=cbCredito]").is(":checked")) {
+        opcion = "Credito";
+        cant_cuotas = $("input[id*=tbCantCuotas]").val();
+        sumaResta = "R";
+        if(cant_cuotas == ""){
+            popupFaltaCuotas();
+            return false;
+        }
+        guardarFacturas();
+    }else{
+        opcion = "Contado"; 
+        sumaResta = "S"; 
+        cant_cuotas = "0";
+        popupFormaPago();
+    }
+    ///////
     
         
+    }
+        
+}
+
+//Rellena los campos con los datos del proveedor seleccionado
+function guardarFacturas() {
+    var condicion_pago = 1;
+    //var pagosValores = cargarArregloFormasPago();   
+    var pagosValores = "";   
     var id_factura = '1';
-    var proveedor = _idProveedor;//$("select[id*=chProveedor]").val();
-    //alert("PROVEEDORRRRR "+_idProveedor);
-    //return false;
+    var proveedor = _idProveedor;
     var fecha = $("input[id*=tbFecha]").val();
     var total_factura = $("input[id*=tbTotal]").val();
     var empleado = "1";
@@ -752,9 +977,6 @@ function guardarFactura() {
     var num_cheque = $("input[id*=tbNroCheque]").val();
     var cant_cuotas;
     var sumaResta;
-    //alert(_estado);
-    //return false;
-    
     var serial = cargarArreglo();
     var detalle_factura = serial;
     if(serial[3] == 'N'){
@@ -765,33 +987,32 @@ function guardarFactura() {
     
     if ($("input[id*=cbCredito]").is(":checked")) {
         opcion = "Credito";
+        pagosValores = ""; 
         cant_cuotas = $("input[id*=tbCantCuotas]").val();
         sumaResta = "R";
         if(cant_cuotas == ""){
-        //PopUp faltaCuotas
-            
             popupFaltaCuotas();
             return false;
         }
-        //tbCantCuotas
-    //return false;
+        alert("pagosValores "+pagosValores);
     }else{
-        //alert("Contado");
         opcion = "Contado"; 
         sumaResta = "S"; 
         cant_cuotas = "0";
+        pagosValores = cargarArregloFormasPago(); 
+        alert("pagosValores "+pagosValores);
     }
+    
+    
+    
     var numCuota = 0;
-    //var cantCuotas = $("input[id*=tbCantCuotas]").val();//
     var cantCuotas = cant_cuotas;
-    var importe = $("input[id*=tbTotal]").val();//
+    var importe = $("input[id*=tbTotal]").val();
     var saldo = importe;
     var fechaVencimiento = "01/01/2009"; 
-    var idFormaPago = $("select[id*=chFormaPago]").val();//
+    var idFormaPago = $("select[id*=chFormaPago]").val();
     var idMovCtaCtePro = _movIdCtaCte;
     var interes = $("select[id*=chInteres]").val();
-    //alert(idMovCtaCtePro);
-    //return false;
           var parametros = "{" +
              "'id_factura':'"+ id_factura + "', "+ 
              "'proveedor':'"+ proveedor + "', " + 
@@ -812,11 +1033,8 @@ function guardarFactura() {
              "'idFormaPago':'"+ idFormaPago +"', " + 
              "'sumaResta':'"+ sumaResta +"', " + 
              "'idMovCtaCtePro':'"+ idMovCtaCtePro +"', " + 
-             "'interes':'"+interes+"'}"; 
-             
-    /*string detalle_factura, string num_cheque,
-        string id_banco, string opcion*/
-        
+             "'interes':'"+ interes +"', " + 
+             "'pagosValores':'"+pagosValores+"'}"; 
      $.ajax({
             type:"POST",
             dataType: "json", 
@@ -831,11 +1049,17 @@ function guardarFactura() {
                              }
                         }
                     });//fin ajax
+                    
                     }
                     deshabilitarCampos();
                     vaciarCampos();
+                    $("input[id*=imgbtNuevo]").css("display", "inline");
+                    $("input[id*=imgbtGuardar]").css("display", "none");
+                    oTablaDetalle.fnClearTable(oTablaDetalle);
                     return false;
 }
+
+
 
 //Devuelbe un arreglo serializado del detalle
 function cargarArreglo(){
@@ -844,7 +1068,7 @@ function cargarArreglo(){
     var fila = new Array();
     var cont = 0;
    //"[[\"29\",200000,\"Pago total de la cuota Nº 1/2 de la factura 321\"],[\"30\",200000,\"Pago total de la cuota Nº 2/2 de la factura 321\"]]"
-    //recorrer datatable detalle
+    //recorrer datatable detalle 
     var res = '[';
     $('#tablaDetalle tbody tr').each(function() {
         if(cont != 0){
@@ -862,6 +1086,46 @@ function cargarArreglo(){
         fila.push(cant);
         fila.push(cod);
         fila.push(costoUnit);
+        fila.push(total);
+        arreglo.push(fila);
+        cont++;
+    });
+    res += ']';
+        return res;    
+        // "[[\"29\",200000,\"Pago total de la cuota Nº 1/2 de la factura 321\"],[\"30\",200000,\"Pago total de la cuota Nº 2/2 de la factura 321\"]]"
+ }
+ 
+ //Devuelbe un arreglo serializado del detalle
+function cargarArregloFormasPago(){
+    var aTrs    = oTablaFormaPago.fnGetNodes();
+    var arreglo = new Array();
+    var fila = new Array();
+    var cont = 0;
+   //"[[\"29\",200000,\"Pago total de la cuota Nº 1/2 de la factura 321\"],[\"30\",200000,\"Pago total de la cuota Nº 2/2 de la factura 321\"]]"
+    //recorrer datatable detalle
+    var res = '[';
+    $('#tablaFormaPagos tbody tr').each(function() {
+        if(cont != 0){
+            res += ",";
+        }
+        
+        var nTds = $('td', this);
+        var valor = $(nTds[0]).text();
+        var codBanco = $(nTds[1]).text();
+        //var costoUnit = $(nTds[2]).text();
+        var numValor = $(nTds[3]).text();
+        var monto = $(nTds[4]).text();
+        var total = $(nTds[5]).text();
+        
+        //res += '[\"'+cant+'\\",'+cod+',\\"'+costoUnit+'\\",\\"'+total+'\\"]';
+        
+        res += '[\"'+valor+'\\",'+codBanco+',\\"'+numValor+'\\",'+monto+',\\"'+total+'\\"]';
+
+        var fila = new Array();
+        fila.push(valor);
+        fila.push(codBanco);
+        fila.push(numValor);
+        fila.push(monto);
         fila.push(total);
         arreglo.push(fila);
         cont++;
@@ -1093,6 +1357,7 @@ function deshabilitarCampos(){
 function nuevaFactura(){
     habilitarCamposFactura();
     deshabilitarBotones();
+    $("input[id*=tbNum]").focus();
     $("input[id*=imgbtGuardar]").css("display", "inline");
     $("input[id*=imgbtCancel]").css("display", "inline");
     
@@ -1185,4 +1450,11 @@ function fnGetSelectede( oTableLocal )
 	var s = $(aTrs[0]).text();
 	alert("no se selecciono nada "+s);
 	return aReturn;
+}
+
+
+function formasPagos(){
+    popupFormaPago();
+    return false;
+
 }
