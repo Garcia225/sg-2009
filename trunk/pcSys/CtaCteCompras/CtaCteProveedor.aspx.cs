@@ -15,4 +15,8 @@ public partial class pruebaMaster3 : System.Web.UI.Page
     {
 
     }
+    protected void imgbtListar_Click(object sender, ImageClickEventArgs e)
+    {
+        Response.Redirect("reporteCtaCteProveedores.aspx");
+    }
 }

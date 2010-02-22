@@ -490,6 +490,9 @@ function cancela(){
                                         ImageUrl="../images/save.png" />
                                 </td>
                                 <td>
+                                        <asp:ImageButton ID="imgbtListar" ToolTip="Guardar" runat="server" ImageUrl="~/images/list.ico" OnClientClick="Imprimir(); return false" />
+                                    </td>
+                                <td>
                                     <asp:ImageButton ID="imgbtdMod" runat="server" ImageUrl="../images/list.ico" />
                                 </td>
                                 <td>
