@@ -1026,6 +1026,11 @@ public class Factura
         }
     }
 
+    /// <summary>
+    /// Actualiza en haber del proveedor
+    /// </summary>
+    /// <param name="monto"></param>
+    /// <param name="id_Proveedor"></param>
     public void updateHaber(string monto, string id_Proveedor)
     {
 
@@ -1047,6 +1052,97 @@ public class Factura
         {
             
         }
+    }
+
+
+    public string getIdTargeta(string idBanco, string tipoTargeta)
+    {
+
+        Conexion _conexion = null;
+        int cont = 0;
+        try
+        {
+            //falta codigo para guardar mov de la cta cte de la factura
+            // Crear y abrir la conexión
+            _conexion = new Conexion();
+            _conexion.OpenConnection();
+            string consultaEstado = " select tar.id_targeta_credito "+
+             "from PCCC_TARGETA AS tar, PCCC_BANCO AS ban, PCCC_TIPO_TARGETA AS tipo "+
+             "where tar.id_banco = " + idBanco + " and tar.id_tipo_targeta = tipo.id_tipo_targeta   " +       
+             "AND tipo.descripcion = '"+tipoTargeta+"'";
+             
+             
+            // El nombre de columna 'PAGADO' no es válido
+            SqlCommand consulta = new SqlCommand(consultaEstado, _conexion.getSqlConnection());
+            SqlDataReader reader = consulta.ExecuteReader();
+            string numero = "";
+            while (reader.Read())
+            {
+                numero = reader[0].ToString();
+            }
+            reader.Close();
+            return numero;
+        }
+        catch (Exception exc)
+        {
+            return "ERROR";
+        }
+    }
+
+    /// <summary>
+    /// Guarda los valores con que se pago la factura
+    /// </summary>
+    /// <param name="monto"></param>
+    /// <param name="id_Proveedor"></param>
+    public void guardarValores(string valores, string _idFactura)
+    {
+        Conexion _conexion = null;
+
+        try{
+        _conexion = new Conexion();
+        //ZONA SERIALIZAR
+        // La función o el procedimiento sp_am_detalle_factura tiene demasiados argumentos.
+
+        //serliazador
+        JavaScriptSerializer serializer = new JavaScriptSerializer();
+
+        // creo el arrayList Principal, que contiene las filas a ser insertada
+        ArrayList arrayListPrincipal = new ArrayList();
+
+        //array list que contiene los valores a ser insertados
+        ArrayList arrayListFilas = new ArrayList();
+
+        // Deseralizar arreglo y crearlo en el arrayList Principal
+        arrayListPrincipal = serializer.Deserialize<ArrayList>(valores);//"\"[[\"2\",1,\"12000\",\"24000\"]]\""
+        foreach (ArrayList arrayFila in arrayListPrincipal)
+        {//"[[\"CHEQUE\",1,\"1334457786\",120000,\"\"]]"
+            string valor = arrayFila[0].ToString();//"1"
+            string codBanco = arrayFila[1].ToString();//"12000"
+            string numValor = arrayFila[2].ToString();//"24000"
+            string monto = arrayFila[3].ToString();//CHEQUE
+            string tipo = arrayFila[4].ToString();//CHEQUE
+
+            if (valor == "TARGETA")
+            {
+                string idTar = getIdTargeta(codBanco, tipo);
+
+                CuponCredito cupon = new CuponCredito("1", idTar, _idFactura, monto);
+                cupon.Guardar();
+            }
+            else
+            {
+                Cheques cheque = new Cheques(monto, numValor, codBanco);
+                cheque.Guardar();
+            }
+        
+
+        }
+    }
+    catch (Exception d)
+    {
+
+    }
+
     }
 }
 
