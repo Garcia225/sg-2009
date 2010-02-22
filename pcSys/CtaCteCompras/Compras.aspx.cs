@@ -420,5 +420,9 @@ public partial class Compras : System.Web.UI.Page
         factura.Anular();
         return "EXITO";
     }
+    protected void imgbtListar_Click(object sender, ImageClickEventArgs e)
+    {
+        Response.Redirect("reporteCtaCteProveedores.aspx");
+    }
 }
 

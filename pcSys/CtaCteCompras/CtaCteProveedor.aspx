@@ -19,6 +19,9 @@
                         <td align="center">
                             <%--<img id="imgLoad" src="../images/loader.gif" alt="" />--%>
                         </td>
+                        <td>
+                                        <asp:ImageButton ID="imgbtListar" ToolTip="Guardar" runat="server" ImageUrl="~/images/list.ico" OnClientClick="Imprimir(); return false" />
+                                    </td>
                     </tr>
                 </table>
             </div>
