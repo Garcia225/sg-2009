@@ -1,5 +1,5 @@
 <%@ Page Language="C#" MasterPageFile="~/MasterPage.master" AutoEventWireup="true"
-    CodeFile="NotaCredito.aspx.cs" Inherits="NotadeCredito" Title="Nota Credito" %>
+    CodeFile="NotaCredito.aspx.cs" Inherits="NotadeCredito" Title="PcSys | Nota Credito" %>
 
 <%@ Register Assembly="System.Web.Extensions, Version=1.0.61025.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35"
     Namespace="System.Web.UI" TagPrefix="asp" %>
@@ -155,7 +155,7 @@
                     <table>
                         <tr>
                             <td>
-                                <asp:ImageButton ID="imgbtNuevo" runat="server" OnClientClick="nuevo(); return false;"
+                                <asp:ImageButton ID="imgbtNuevo" runat="server"  ToolTip = "Nuevo" OnClientClick="nuevo(); return false;"
                                     ImageUrl="~/images/new.ico" />
                             </td>
                             <td>
@@ -169,7 +169,7 @@
                                 <asp:ImageButton ID="imgbtBorrar" runat="server" ToolTip="Borrar" ImageUrl="~/images/delete.ico" />
                             </td>
                             <td>
-                                <asp:ImageButton ID="imgbtCancelar" runat="server" ImageUrl="~/images/atras.ico"
+                                <asp:ImageButton ID="imgbtCancelar" runat="server" ToolTip ="Cancelar" ImageUrl ="~/images/cancel.png" 
                                     OnClientClick="cancela(); return false();" />
                             </td>
                         </tr>

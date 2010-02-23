@@ -1,5 +1,5 @@
 <%@ Page Language="C#" MasterPageFile="~/MasterPage.master" AutoEventWireup="true"
-    CodeFile="Proveedor.aspx.cs" Inherits="Personas" Title="PcSyc | Periodos" %>
+    CodeFile="Proveedor.aspx.cs" Inherits="Personas" Title="PcSys | Proveedor" %>
 
 <%@ Register Assembly="System.Web.Extensions, Version=1.0.61025.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35"
     Namespace="System.Web.UI" TagPrefix="asp" %>
@@ -264,7 +264,7 @@ function cancela() {
                                         <asp:ImageButton ID="imgbtGuardar" ToolTip="Guardar" runat="server" ImageUrl="../images/save.png" />
                                     </td>
                                     <td>
-                                        <asp:ImageButton ID="imgbtListar" ToolTip="Guardar" runat="server" ImageUrl="~/images/list.ico" OnClientClick="Imprimir(); return false" />
+                                        <asp:ImageButton ID="imgbtListar" ToolTip="Listar" runat="server" ImageUrl="~/images/list.ico" OnClientClick="Imprimir(); return false" />
                                     </td>
                                     <td>
                                         <asp:ImageButton ID="imgbtdMod" ToolTip="Modificar" runat="server" ImageUrl="../images/save.png" />

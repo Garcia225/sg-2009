@@ -217,7 +217,7 @@ autocompleteFactura(codigo);
 function obtenerResultadoFactura(row){
 //var codigo = row.split("|")[0];
 codigo = row[0];
-alert("codigo "+codigo);
+//alert("codigo "+codigo);
 //alert(codigo);
 //rellenarCamposProveedor(codigo);
 
@@ -461,14 +461,15 @@ function popupEliminarNotaCredito() {
                 $(this).dialog('destroy');
             },
             buttons: {
-            'Eliminar': function(){
+             'Cancelar': function(){
+		        $(this).dialog('destroy');
+            
+               
+            },'Eliminar': function(){
                 borrar(_idProveedor);
                 $(this).dialog('destroy');
-               
-            },
-            'Cancelar': function(){
-                $(this).dialog('destroy');
-               
+		   
+		        
             }
             }
         });

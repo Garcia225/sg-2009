@@ -1051,8 +1051,9 @@ function guardarFacturas() {
                     });//fin ajax
                     
                     }
+                     vaciarCampos();
                     deshabilitarCampos();
-                    vaciarCampos();
+                   
                     $("input[id*=imgbtNuevo]").css("display", "inline");
                     $("input[id*=imgbtGuardar]").css("display", "none");
                     oTablaDetalle.fnClearTable(oTablaDetalle);
@@ -1253,6 +1254,7 @@ function borrar()
                         }
                     });//fin llamada ajax al servidor
                     return false;
+                   
                    
 }
 
