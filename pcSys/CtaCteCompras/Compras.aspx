@@ -26,14 +26,20 @@
     document.getElementById('tab2').setAttribute('class', 'tab active');
     document.getElementById('tab3').setAttribute('class', 'tab');
     document.getElementById('tab4').setAttribute('class', 'tab');
-    
+    document.getElementById('tab5').setAttribute('class', 'tab');
     
     $(document).ready(function() {
     $("input[id*=tbNum]").numeric();
     $("input[id*=tbCant]").numeric();
     $("input[id*=tbNroCheque]").numeric();
+    $("input[id*=tbMonto]").numeric();
+    $("input[id*=tbMonto]").removeAttr('disabled'); 
+    $("input[id*=tbMonto]").attr('disabled', 'disabled');
+        
     $("input[id*=tbValor]").css("display", "none");
     $("span[id*=lbValor]").css("display", "none");
+    $("select[id*=chTipoValor]").css("display", "none");
+    $("span[id*=lbTipoValor]").css("display", "none");
     autocompleteBancos();
     //Se muestran solo los botones necesarios
     $("input[id*=imgbtNuevo]").css("display", "inline");
@@ -66,12 +72,13 @@
      $("#cbCredito").change(function(){
 
         if ($("#cbCredito").is(":checked")) {
+       
           document.forms[0].cbContado.checked = false;
           $("#lbContado").removeClass("LabelSelected");
           $("#lbCredito").addClass("LabelSelected");
           $("#divCuotas").slideDown();
           $("#divPago").slideUp();
-          autocompleteTarjeta();
+          //autocompleteTarjeta();
           //divPago
         } else {
           document.forms[0].cbContado.checked = true;
@@ -100,27 +107,30 @@
         }    
       });
       
-      
-      
-      
-      
-      
-      
       $("#cbTargeta").change(function(){
 
         if ($("#cbTargeta").is(":checked")) {
-          document.forms[0].cbCheque.checked = false;
+          //$("input[id*=tbMonto]").val(''); 
+          $("input[id*=tbTipoValor]").val(''); 
+          $("input[id*=tbValor]").val(''); 
+          
+          $("span[id*=lbValor]").text("Nº de Targeta");
+          $("input[id*=tbMonto]").removeAttr('disabled'); 
+          $("input[id*=tbMonto]").attr('disabled', 'disabled');
+          $("input[id*=cbCheque]").removeAttr('checked');
+          $("input[id*=cbCheque]").attr("checked",$("input[id*=cbCheque]").is(":checked"));  
           $("#lbCheque").removeClass("LabelSelected");
           $("#lbTargeta").addClass("LabelSelected");
+          $("input[id*=tbTipoValor]").css("display", "inline");
           $("input[id*=tbValor]").css("display", "inline");
           $("span[id*=lbValor]").css("display", "inline");
-          //$("#divCuotas").slideDown();
-          //$("#divPago").slideUp();
+          $("select[id*=chTipoValor]").css("display", "inline");
+          $("span[id*=lbTipoValor]").css("display", "inline");
           $("#divCheque").slideUp();
-          autocompleteTarjeta();
-          //divPago
         } else {
-          document.forms[0].cbCheque.checked = true;
+          
+          $("input[id*=cbCheque]").attr("checked",$("input[id*=cbCheque]").is(":checked"));
+          $("input[id*=tbTipoValor]").css("display", "none");
           $("#lbCheque").addClass("LabelSelected");
           $("#lbTargeta").removeClass("LabelSelected");
           $("#divCheque").slideDown();
@@ -131,54 +141,31 @@
      $("#cbCheque").change(function(){
 
         if ($("#cbCheque").is(":checked")) {
-          document.forms[0].cbTargeta.checked = false;
+          //$("input[id*=tbMonto]").val('');
+          $("input[id*=tbNroCheque]").val('');
+          $("input[id*=tbBanco]").val('');
+          
+          
+          $("input[id*=tbMonto]").removeAttr('disabled'); 
+          $("input[id*=tbMonto]").attr('disabled', 'disabled');
+          $("input[id*=tbTipoValor]").css("display", "none");
+          $("input[id*=cbTargeta]").removeAttr('checked');
+          $("input[id*=cbTargeta]").attr("checked",$("input[id*=cbTargeta]").is(":checked"));
           $("#lbTargeta").removeClass("LabelSelected");
           $("#lbCheque").addClass("LabelSelected");
-          //autocompleteBancos();
           $("input[id*=tbValor]").css("display", "none");
           $("span[id*=lbValor]").css("display", "none");
-          //////////////////////////////////////////////////////////////////////tbValor
-          //$("#divCuotas").slideUp();
+          $("select[id*=chTipoValor]").css("display", "none");
+          $("span[id*=lbTipoValor]").css("display", "none");
           $("#divCheque").slideDown();
         } else {
-          document.forms[0].cbTargeta.checked = true;
+          $("input[id*=tbTipoValor]").css("display", "inline");
+          $("input[id*=cbTargeta]").attr("checked",$("input[id*=cbTargeta]").is(":checked"));
           $("#lbTargeta").addClass("LabelSelected");
           $("#lbCheque").removeClass("LabelSelected");
           $("#divCheque").slideDown();
         }    
       });
-
-      
-          //control de checkbox forma de pago
-     /*$("#cbTargeta").change(function(){
-        if ($("#cbTargeta").is(":checked")) {
-          document.forms[0].cbCheque.checked = false;
-          $("#lbCheque").removeClass("LabelSelected");
-          $("#lbTargeta").addClass("LabelSelected");
-          autocompleteTarjeta();
-          //divPago
-        } else {
-          document.forms[0].cbCheque.checked = true;
-          $("#lbCheque").addClass("LabelSelected");
-          $("#lbTargeta").removeClass("LabelSelected");
-          autocompleteCheque();
-        }    
-      });
-          //control de checkbox condicion de pago
-     $("#cbCheque").change(function(){
-
-        if ($("#cbCheque").is(":checked")) {
-          document.forms[0].cbTargeta.checked = false;
-          $("#lbTargeta").removeClass("LabelSelected");
-          $("#ldCheque").addClass("LabelSelected");
-          autocompleteCheque();
-        } else {
-          document.forms[0].cbTargeta.checked = true;
-          $("#lbTargeta").addClass("LabelSelected");
-          $("#ldCheque").removeClass("LabelSelected");
-          autocompleteTarjeta();
-        }    
-      });*/
     });
 //Inhabilita los campos del ABM
 function habilitarCampos() {            
@@ -211,6 +198,8 @@ function cancela(){
     $("input[id*=imgbtdMod]").css("display", "none");
     $("input[id*=imgbtBorrar]").css("display", "none");
     $("input[id*=imgbtCancel]").css("display", "inline");
+    $("#aspnetForm").valid();
+
     return false;
 }
  
@@ -322,7 +311,8 @@ function cancela(){
                                                                     runat="server" Width="68px" />
                                                             </td>
                                                             <td>
-                                                                <asp:Button ID="btEliminar" Text="Eiminar" OnClientClick="borrarDetalle(); return false;" runat="server" Width="68px" />
+                                                                <asp:Button ID="btEliminar" Text="Eiminar" OnClientClick="borrarDetalle(); return false;"
+                                                                    runat="server" Width="68px" />
                                                             </td>
                                                             <td>
                                                                 <asp:Button ID="btCancelar" Text="Cancelar" OnClientClick="cancelarDetalle(); return false;"
@@ -377,11 +367,11 @@ function cancela(){
                                                         <asp:Label ID="lbInteres" runat="server" Text="Interes del"></asp:Label>
                                                     </td>
                                                     <td align="left">
-                                                        <asp:DropDownList ID="chInteres" runat="server" DataSourceID="dsInteres" DataTextField="porcentaje" DataValueField="id_interes">
+                                                        <asp:DropDownList ID="chInteres" runat="server" DataSourceID="dsInteres" DataTextField="porcentaje"
+                                                            DataValueField="id_interes">
                                                         </asp:DropDownList><asp:SqlDataSource ID="dsInteres" runat="server" ConnectionString="<%$ ConnectionStrings:Personal %>"
                                                             SelectCommand="SELECT [id_interes], [porcentaje] FROM [PCCC_INTERES]"></asp:SqlDataSource>
                                                         <asp:Label ID="porcent" Text="%" runat="server"></asp:Label>
-                                                 
                                                     </td>
                                                 </tr>
                                             </table>
@@ -390,60 +380,6 @@ function cancela(){
                                 </tr>
                                 <tr>
                                     <td colspan="8">
-                                        <div id="divPago">
-                                            <table align="center" width="100%">
-                                                <tr>
-                                                    <td colspan="8" style="padding-top: 10px;">
-                                                        <hr />
-                                                    </td>
-                                                </tr>
-                                                <tr>
-                                                    <td align="right" style="width: 169px">
-                                                        &nbsp; &nbsp; &nbsp; &nbsp;
-                                                        <asp:Label ID="Label4" Text="Forma de Pago:" Font-Bold="True" runat="server"
-                                                            Width="110px"></asp:Label>
-                                                    </td>
-                                                    <td align="left">
-                                                        <!--Contado -->
-                                                        <input id="cbCheque" type="checkbox" checked="checked" />
-                                                        <label id="lbCheque" for="cbCheque">
-                                                            Cheque
-                                                        </label>
-                                                        <%--</td>
-                                    <td>--%>
-                                                        <!--Credito -->
-                                                        <input id="cbTargeta" type="checkbox" />
-                                                        <label id="lbTargeta" for="cbTargeta">
-                                                            Targeta</label>
-                                                    </td>
-                                                    <td>
-                                                        <asp:Label ID="lbValor" runat="server" Text="Num del Valor"></asp:Label>
-                                                    </td>
-                                                    <td>
-                                                        <asp:TextBox ID="tbValor" runat="server" Width="350px"></asp:TextBox>
-                                                        <!-- TARJETA -->
-                                                        <div id="divCheque">
-                                                            <table>
-                                                                <tr>
-                                                                    <td>
-                                                                        <asp:Label ID="lbNroCheque" runat="server" Text="Nro Cheque"></asp:Label>
-                                                                    </td>
-                                                                    <td>
-                                                                        <asp:TextBox ID="tbNroCheque" runat="server"></asp:TextBox>
-                                                                    </td>
-                                                                    <td>
-                                                                        <asp:Label ID="lbBanco" Text="Banco" runat="server"></asp:Label>
-                                                                    </td>
-                                                                    <td>
-                                                                        <asp:TextBox ID="tbBanco" runat="server"></asp:TextBox>
-                                                                    </td>
-                                                                </tr>
-                                                            </table>
-                                                        </div>
-                                                    </td>
-                                                </tr>
-                                            </table>
-                                        </div>
                                     </td>
                                 </tr>
                                 <tr>
@@ -486,12 +422,8 @@ function cancela(){
                                         ImageUrl="../images/new.ico" />
                                 </td>
                                 <td>
-                                    <asp:ImageButton ID="imgbtGuardar" runat="server" OnClientClick="guardarFactura(); return false"
-                                        ImageUrl="../images/save.png" />
+                                    <asp:ImageButton ID="imgbtGuardar" runat="server" ImageUrl="../images/save.png" />
                                 </td>
-                                <td>
-                                        <asp:ImageButton ID="imgbtListar" ToolTip="Guardar" runat="server" ImageUrl="~/images/list.ico" OnClientClick="Imprimir(); return false" />
-                                    </td>
                                 <td>
                                     <asp:ImageButton ID="imgbtdMod" runat="server" ImageUrl="../images/list.ico" />
                                 </td>
@@ -553,6 +485,148 @@ function cancela(){
             <div id="faltaCuotas" title="Ingresar Cuotas">
                 <!-- Mensaje de Confirmacion -->
                 No ingreso la cantidad de Cuotas
+            </div>
+        </div>
+        <!-- Falta Cuotas -->
+        <div style="display: none;">
+            <div id="faltaDetalle" title="Detalles Factura">
+                <!-- Mensaje de Confirmacion -->
+                No ingreso los detalles de la Factura
+            </div>
+        </div>
+        <!-- Falta Cuotas -->
+        <div style="display: none;">
+            <div id="cuotasDias" title="Cuotas">
+                <!-- Mensaje de Confirmacion -->
+                No ingreso los detalles de la Factura
+            </div>
+        </div>
+        <!-- Formas de Pago -->
+        <div style="display: none;">
+            <div id="divFormaPago" title="Ingrese la forma de pago">
+                <div id="divPago">
+                    <table align="center" width="100%">
+                        <tr>
+                            <td colspan="8" style="padding-top: 10px;">
+                                <hr />
+                            </td>
+                        </tr>
+                        <tr>
+                            <td align="left">
+                                <!--Contado -->
+                                <table>
+                                    <tr>
+                                        <td>
+                                            <input id="cbCheque" type="checkbox" checked="checked" />
+                                        </td>
+                                        <td>
+                                            <label id="lbCheque" for="cbCheque">
+                                                Cheque
+                                            </label>
+                                        </td>
+                                        <td>
+                                            <input id="cbTargeta" type="checkbox" />
+                                        </td>
+                                        <td>
+                                            <label id="lbTargeta" for="cbTargeta">
+                                                Targeta</label>
+                                        </td>
+                                    </tr>
+                                </table>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td colspan="4">
+                                <table>
+                                    <tr>
+                                        <td>
+                                            <table>
+                                                <tr>
+                                                <td>
+                                                        <asp:Label ID="lbTipoValor" Text="Tipo de Valor" runat="server"></asp:Label>
+                                                    </td>
+                                                    <td>
+                                                        <asp:TextBox ID="tbTipoValor" runat="server"></asp:TextBox>
+                                                    </td>
+                                                    <td>
+                                                        <asp:Label ID="lbValor" runat="server" Text="Num del Valor"></asp:Label>
+                                                    </td>
+                                                    <td>
+                                                        <asp:TextBox ID="tbValor" runat="server" Width="74px"></asp:TextBox>
+                                                    </td>
+                                                    
+                                                </tr>
+                                            </table>
+                                            <!-- TARJETA -->
+                                            <div id="divCheque">
+                                                <table>
+                                                    <tr>
+                                                        <td>
+                                                            <asp:Label ID="lbNroCheque" runat="server" Text="Nro Cheque"></asp:Label>
+                                                        </td>
+                                                        <td>
+                                                            <asp:TextBox ID="tbNroCheque" MaxLength="10" runat="server" Width="70px"></asp:TextBox>
+                                                        </td>
+                                                        <td>
+                                                            <asp:Label ID="lbBanco" Text="Banco" runat="server"></asp:Label>
+                                                        </td>
+                                                        <td>
+                                                            <asp:TextBox ID="tbBanco" runat="server"></asp:TextBox>
+                                                        </td>
+                                                    </tr>
+                                                </table>
+                                            </div>
+                                        </td>
+                                        <td>
+                                            <asp:Label ID="lbMonto" Text="Monto" runat="server"></asp:Label>
+                                            <asp:TextBox ID="tbMonto" MaxLength="9" Width="90px" runat="server"></asp:TextBox>
+                                        </td>
+                                        <td>
+                                        <asp:Button ID="btAgregarFormaPago" OnClientClick="addFormaPago(); return false;" Text="+" runat="server" />
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                    <td colspan="3">
+                                    
+                                    
+                                    
+                                    
+                                    <div id="div1">
+                                    <!-- tabla donde se genera la tabla dinamica-->
+                                    <table width="100%" cellpadding="0" cellspacing="0" border="1" class="display" id="tablaFormaPagos">
+                                        <tbody>
+                                            <!-- Aqui se carga la tabla dinamica-->
+                                        </tbody>
+                                    </table>
+                                </div>
+                                    
+                                    
+                                    
+                                    
+                                    
+                                    
+                                    </td>
+                                    </tr>
+                                </table>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td colspan="8">
+                                <!-- AQUI VA LA TABLA -->
+                                <!-- Tabla Dinamica -->
+                                
+                                
+                                
+                                
+                                
+                                
+                                <asp:SqlDataSource ID="dsTipoTargeta" runat="server" ConnectionString="<%$ ConnectionStrings:Personal %>"
+                                    SelectCommand="SELECT [id_tipo_targeta], [descripcion] FROM [PCCC_TIPO_TARGETA]">
+                                </asp:SqlDataSource>
+                            </td>
+                        </tr>
+                    </table>
+                </div>
             </div>
         </div>
     </div>
