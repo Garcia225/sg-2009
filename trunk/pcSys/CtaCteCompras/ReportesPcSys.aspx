@@ -1,11 +1,11 @@
 <%@ Page Language="C#" MasterPageFile="~/MasterPage.master" AutoEventWireup="true"
-    CodeFile="ReportesPcSys.aspx.cs" Inherits="CtaCteCompras_ReportesPcSys" Title="PcSys | Listado de Reportes " %>
+    CodeFile="ReportesPcSys.aspx.cs" Inherits="CtaCteCompras_ReportesPcSys" Title="PcSys | Reportes Generales " %>
 
 <%@ Register Assembly="Microsoft.ReportViewer.WebForms, Version=8.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a"
     Namespace="Microsoft.Reporting.WebForms" TagPrefix="rsweb" %>
 <%@ Register Assembly="CrystalDecisions.Web, Version=10.2.3600.0, Culture=neutral, PublicKeyToken=692fbea5521e1304"
     Namespace="CrystalDecisions.Web" TagPrefix="CR" %>
-<asp:Content ID="Content1" ContentPlaceHolderID="ContentPlaceHolder1" runat="Server">
+<asp:Content ID="Reportes" ContentPlaceHolderID="ContentPlaceHolder1" runat="Server">
 
     <script type="text/javascript" src="../js/notaCredito.js"></script>
 
