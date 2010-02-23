@@ -313,6 +313,7 @@ function borrar()
 /*Actualiza la tabla*/
 function recargar()
 {
+deshabilitarCampos();
     $.ajax({
         type:"POST", 
         dataType: "json", 

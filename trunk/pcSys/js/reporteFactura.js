@@ -42,7 +42,7 @@ function autocompleteProveedor() {
                     }).result(function(e, i, row) {
 	                	_codigo=row.split("|")[0];
 	                	$("input[id*=tbID]").val(_codigo);
-	                	alert("_codigo "+_codigo);
+	                	//alert("_codigo "+_codigo);
                     });
                
             },
@@ -63,7 +63,7 @@ function autocompleteProveedor() {
                     }
                 });
             });
-        alert("Salio del autocomplete");
+        //alert("Salio del autocomplete");
     return false;
 }
 

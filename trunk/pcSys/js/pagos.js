@@ -763,3 +763,5 @@ function controlarInteres(idFactura){
         return res;    
         // "[[\"29\",200000,\"Pago total de la cuota Nº 1/2 de la factura 321\"],[\"30\",200000,\"Pago total de la cuota Nº 2/2 de la factura 321\"]]"
  }
+ 
+ 
