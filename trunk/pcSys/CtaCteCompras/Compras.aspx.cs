@@ -104,7 +104,7 @@ public partial class Compras : System.Web.UI.Page
     /// </summary>
     /// <returns></returns>
     [System.Web.Services.WebMethod()]
-    public static string GetTargetas()
+    public static string GetTargetas(string idTipoTar)
     {
         // Pide los datos a la clase Cliente y lo devuelve
 
@@ -131,9 +131,12 @@ public partial class Compras : System.Web.UI.Page
             //crear sentencia sql
             StringBuilder sentencia = new StringBuilder();
 
-            sentencia.Append(" SELECT num_tarjeta ");
-            sentencia.Append(" FROM PCCC_CUPON_DE_CREDITO");
+            sentencia.Append(" SELECT tar.num_targeta, tar.id_banco, ban.banco ");
+            sentencia.Append(" FROM   PCCC_TARGETA AS tar,PCCC_BANCO AS ban ");
+            sentencia.Append(" WHERE  tar.id_banco = ban.id_banco ");
+            sentencia.Append(" AND    TAR.id_tipo_targeta = " + idTipoTar);
 
+            
             //carga el data set
 
             comando = new SqlDataAdapter(sentencia.ToString(), conexion.getConectionString());
@@ -343,7 +346,8 @@ public partial class Compras : System.Web.UI.Page
     public static string GuardarFactura(string id_factura, string proveedor, string num_factura, string fecha, 
         string total_factura, string condicion_pago, string empleado, string detalle_factura, string num_cheque,
         string id_banco, string opcion,string numCuota,string cantCuotas,string importe,string saldo,
-        string fechaVencimiento,string idFormaPago,string sumaResta,string idMovCtaCtePro,string interes)
+        string fechaVencimiento,string idFormaPago,string sumaResta,string idMovCtaCtePro,string interes,
+        string pagosValores)//"[[\"3\",4,\"120000\",\"360000\"]]"     "[[\"CHEQUE\",1,\"1334457786\",120000,\"\"]]"
     {
         Factura fac = new Factura();
        
@@ -372,14 +376,13 @@ public partial class Compras : System.Web.UI.Page
         }
         else
         {
+            //Obtiene el id del estado PENDIENTE
             string estado = fac.getEstado("PENDIENTE");
             // Pide los datos a la clase Cliente y lo devuelve
             Factura factura = new Factura(id_factura, proveedor, num_factura, fecha, total_factura, condicion_pago, empleado, detalle_factura, cantCuotas, sumaResta, estado);
             factura.Guardar();
-
-            Cheques cheque = new Cheques(total_factura, num_cheque, fecha, id_banco);
-            //factura.Guardar();
-            cheque.Guardar();
+            string ultimo = factura.ultimoGuardado();
+            factura.guardarValores(pagosValores, ultimo);
             return "EXITO";
         }
         return "ERROR";
@@ -420,9 +423,65 @@ public partial class Compras : System.Web.UI.Page
         factura.Anular();
         return "EXITO";
     }
-    protected void imgbtListar_Click(object sender, ImageClickEventArgs e)
+
+    /// <summary>
+    /// Obtengo los tipos de targeta
+    /// </summary>
+    /// <returns></returns>
+    [System.Web.Services.WebMethod()]
+    public static string GetTipoTargetas()
     {
-        Response.Redirect("reporteCtaCteProveedores.aspx");
+        // Pide los datos a la clase Cliente y lo devuelve
+
+        Serializador serial = new Serializador();
+        StringBuilder sb = new StringBuilder();
+        Conexion conexion = null;
+
+        try
+        {
+
+            conexion = new Conexion();
+
+            //adaptador de datos
+            SqlDataAdapter comando = new SqlDataAdapter();
+
+            //crea el data set
+            DataSet dataSet = new DataSet();
+
+            //abre la conexion
+            conexion.OpenConnection();
+
+            conexion.getSqlConnection().BeginTransaction();
+
+            //crear sentencia sql
+            StringBuilder sentencia = new StringBuilder();
+
+            sentencia.Append(" SELECT    id_tipo_targeta, descripcion ");
+            sentencia.Append(" FROM  PCCC_TIPO_TARGETA");
+            //carga el data set
+
+            comando = new SqlDataAdapter(sentencia.ToString(), conexion.getConectionString());
+            //llena el dataset
+            comando.Fill(dataSet, "PCCC_TIPO_TARGETA");
+
+
+            //serializar dataset
+            sb.Append(serial.JSON(dataSet.Tables["PCCC_TIPO_TARGETA"]));
+        }
+        catch (Exception error)
+        {
+            sb.Append(error);
+        }
+        finally
+        {
+            conexion.CloseConnection();
+        }
+
+
+        return sb.ToString();
+
+        //}
+        //return Proveedores.getNombreProveedor();
     }
 }
 
