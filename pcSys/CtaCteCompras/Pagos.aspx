@@ -1,7 +1,7 @@
 <%@ Page Language="C#" MasterPageFile="~/MasterPage.master" AutoEventWireup="true"
     CodeFile="Pagos.aspx.cs" Inherits="CtaCteCompras_Pagos" Title="PcSys | Pagos" %>
 
-<asp:Content ID="Content1" ContentPlaceHolderID="ContentPlaceHolder1" runat="Server">
+<asp:Content ID="Pagos" ContentPlaceHolderID="ContentPlaceHolder1" runat="Server">
 
     <script type="text/javascript">
 //Organiza los tabs
