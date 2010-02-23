@@ -1,0 +1,86 @@
+/* Procedimiento para ordenar reportes por criterio
+opciones:
+- 0 - Todos los proveedores
+- 1 - proveedores
+*/
+ALTER PROCEDURE [dbo].[sp_reporte_ctacte_proveedores](@opcion int, @filtro varchar(50))
+AS
+
+			IF(@opcion = 0)
+				BEGIN
+SELECT SALDOFACTURAS.SALDO_FACTURA,SALDOCUOTAS.SALDO_CUOTA,SALDOPROVEEDORES.SALDO_PROVEEDOR
+FROM 
+				/*SALDO DE CADA FACTURA*/
+(SELECT	DISTINCT
+								(F.total_factura - sum(PC.importe)) AS SALDO_FACTURA
+					FROM        PCCC_FACTURA AS F,PCCC_PAGO_CUOTAS AS PC,PCCC_PROVEEDORES AS P,
+								PCCC_MOVIMIENTO_CTA_CTE_PROVEEDORES AS MCCP
+				    WHERE		PC.id_mov_cta_cte_pro = MCCP.id_mov_cta_cte_pro 
+                                AND MCCP.id_factura = F.id_factura AND F.id_estado = 1	
+								AND F.id_proveedor = P.id_proveedor 				
+					group BY	(F.total_factura))AS SALDOFACTURAS,
+
+/*SALDO DE CADA CUOTA*/
+(SELECT	DISTINCT
+								C.saldo AS SALDO_CUOTA
+					FROM        PCCC_FACTURA AS F,PCCC_CUOTAS AS C,PCCC_PROVEEDORES AS P,
+								PCCC_MOVIMIENTO_CTA_CTE_PROVEEDORES AS MCCP
+				    WHERE		C.id_mov_cta_cte_pro = MCCP.id_mov_cta_cte_pro 	
+								AND F.id_proveedor = P.id_proveedor	
+								AND MCCP.id_factura = F.id_factura
+								AND F.id_estado = 1	) AS SALDOCUOTAS,
+
+/*SALDO DE CADA PROVEEDOR*/
+(SELECT	DISTINCT	
+								CCP.saldo AS SALDO_PROVEEDOR
+					FROM        PCCC_PROVEEDORES AS P,
+								PCCC_CTA_CTE_PROVEEDOR AS CCP,
+								PCCC_FACTURA AS F,
+								PCCC_MOVIMIENTO_CTA_CTE_PROVEEDORES AS MCCP
+				    WHERE		CCP.id_proveedor = P.id_proveedor
+								AND MCCP.num_cta_cte_pro = 	CCP.num_cta_cte_pro
+								AND MCCP.id_factura = F.id_factura
+								AND F.id_estado = 1	) AS SALDOPROVEEDORES
+				END 
+			ELSE IF (@opcion = 1)/*PROVEEDORES*/
+
+				BEGIN
+SELECT SALDOFACTURAS.SALDO_FACTURA,SALDOCUOTAS.SALDO_CUOTA,SALDOPROVEEDORES.SALDO_PROVEEDOR
+FROM 
+	(SELECT	DISTINCT
+								(F.total_factura - sum(PC.importe)) AS SALDO_FACTURA
+					FROM        PCCC_FACTURA AS F,PCCC_PAGO_CUOTAS AS PC,PCCC_PROVEEDORES AS P,
+								PCCC_MOVIMIENTO_CTA_CTE_PROVEEDORES AS MCCP
+				    WHERE		F.id_proveedor LIKE ('%' + @filtro + '%')
+								AND PC.id_mov_cta_cte_pro = MCCP.id_mov_cta_cte_pro 
+                                AND MCCP.id_factura = F.id_factura AND F.id_estado = 1	
+								AND F.id_proveedor = P.id_proveedor 				
+					group BY	(F.total_factura))AS SALDOFACTURAS,
+
+/*SALDO DE CADA CUOTA*/
+	(SELECT	DISTINCT
+								C.saldo AS SALDO_CUOTA
+					FROM        PCCC_FACTURA AS F,PCCC_CUOTAS AS C,PCCC_PROVEEDORES AS P,
+								PCCC_MOVIMIENTO_CTA_CTE_PROVEEDORES AS MCCP
+				    WHERE		F.id_proveedor LIKE ('%' + @filtro + '%')
+								AND C.id_mov_cta_cte_pro = MCCP.id_mov_cta_cte_pro 	
+								AND F.id_proveedor = P.id_proveedor	
+								AND MCCP.id_factura = F.id_factura
+								AND F.id_estado = 1	)AS SALDOCUOTAS,
+
+/*SALDO DE CADA PROVEEDOR*/
+	(SELECT	DISTINCT	
+								CCP.saldo AS SALDO_PROVEEDOR
+					FROM        PCCC_PROVEEDORES AS P,
+								PCCC_CTA_CTE_PROVEEDOR AS CCP,
+								PCCC_FACTURA AS F,
+								PCCC_MOVIMIENTO_CTA_CTE_PROVEEDORES AS MCCP
+				    WHERE		CCP.id_proveedor LIKE ('%' + @filtro + '%')
+								AND CCP.id_proveedor = P.id_proveedor
+								AND MCCP.num_cta_cte_pro = 	CCP.num_cta_cte_pro
+								AND MCCP.id_factura = F.id_factura
+								AND F.id_estado = 1	) AS SALDOPROVEEDORES
+					
+				END 
+							
+return
