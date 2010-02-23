@@ -33,15 +33,15 @@
                 PcSys<small>Modulo Cuenta Corriente</small></h4>
             <div class="tabbed_area">
                 <ul class="tabs">
-                    <li><a id="tab1" href="Proveedor.aspx" title="content_1" class="tab" onclick="irTab1(); return false;">
+                    <li><a id="tab1" href="Proveedor.aspx" title="Proveedores" class="tab" onclick="irTab1(); return false;">
                         Proveedor</a></li>
-                    <li><a id="tab2" href="Compras.aspx" title="content_2" class="tab active" onclick="irTab2(); return false;">
+                    <li><a id="tab2" href="Compras.aspx" title="Compras" class="tab active" onclick="irTab2(); return false;">
                         Compras</a></li>
-                    <li><a id="tab3" href="Pagos.aspx" title="content_3" class="tab" onclick="irTab3(); return false;">
+                    <li><a id="tab3" href="Pagos.aspx" title="Pagos" class="tab" onclick="irTab3(); return false;">
                         Pagos</a></li>
-                    <li><a id="tab4" href="NotaCredito.aspx" title="content_4" class="tab" onclick="irTab4(); return false;">
+                    <li><a id="tab4" href="NotaCredito.aspx" title="Nota_Credito" class="tab" onclick="irTab4(); return false;">
                         Nota Credito</a></li>
-                   <li><a id="tab5" href="ReportesPcSys.aspx" title="content_5" class="tab" onclick="irTab5(); return false;">
+                   <li><a id="tab5" href="ReportesPcSys.aspx" title="Reportes" class="tab" onclick="irTab5(); return false;">
                         Reportes</a></li>
                 </ul>
                 <asp:ContentPlaceHolder ID="ContentPlaceHolder1" runat="server">
